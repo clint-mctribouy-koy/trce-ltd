@@ -1,24 +1,38 @@
-import logo from "./logo.svg";
-import "./App.css";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import Home from "./scenes/home/Home";
+import Navbar from "./scenes/global/Navbar";
+import Footer from "./scenes/global/Footer";
+import ItemDetails from "./scenes/itemDetails/ItemDetails";
+import CartMenu from "./scenes/global/CartMenu";
+import Checkout from "./scenes/checkout/Checkout";
+import Confirmation from "./scenes/checkout/Confirmation";
 
-function App() {
-  const [data, setData] = useState(null);
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    fetch("http://localhost:8000/test/")
-      .then((res) => res.json())
-      .then((data) => setData(data.data));
-  });
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
+  return null;
+};
+
+function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        {/* <h1>An Awesome Blog </h1> */}
-        <h3>On Django, Postgres,x</h3>
-        <p>{data}</p>
-      </header>
+    <div className="app">
+      <BrowserRouter>
+        <Navbar />
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="item/:itemId" element={<ItemDetails />} />
+          <Route path="checkout" element={<Checkout />} />
+          <Route path="checkout/success" element={<Confirmation />} />
+        </Routes>
+        <CartMenu />
+        <Footer />
+      </BrowserRouter>
     </div>
   );
 }
