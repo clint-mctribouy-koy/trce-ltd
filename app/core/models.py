@@ -65,7 +65,7 @@ class Product(models.Model):
         return self.title
 
 class BrandStore(models.Model):
-    name = models.CharField(max_length=255, default="TRCE STORE")
+    name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     products = models.ForeignKey('BrandStore', on_delete=models.CASCADE)
 

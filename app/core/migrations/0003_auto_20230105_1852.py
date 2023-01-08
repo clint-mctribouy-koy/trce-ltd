@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name='BrandStore',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(default='TRCE STORE', max_length=255)),
+                ('name', models.CharField(max_length=255)),
                 ('description', models.CharField(max_length=255)),
                 ('products', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core.brandstore')),
             ],
@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='product',
             name='brand',
-            field=models.ForeignKey(default='TRCE STORE', on_delete=django.db.models.deletion.CASCADE, to='core.brandstore'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='core.brandstore'),
             preserve_default=False,
         ),
     ]
