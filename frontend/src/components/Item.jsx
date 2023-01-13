@@ -16,16 +16,7 @@ const Item = ({ item, width }) => {
     palette: { neutral },
   } = useTheme();
 
-  const { item_name, price, image } = item;
-  // const {
-  //   data: {
-  //     attributes: {
-  //       formats: {
-  //         medium: { url },
-  //       },
-  //     },
-  //   },
-  // } = image;
+  const { item_name, price } = item;
   console.log("HEY FUCK YOU", item.image, item.price, item.item_name);
 
   return (
@@ -40,7 +31,7 @@ const Item = ({ item, width }) => {
           width="300px"
           height="400px"
           src={item.image}
-          // onClick={() => navigate(`/item/${item.id}`)}
+          onClick={() => navigate(`/item/${item.uuid}`)}
           style={{ cursor: "pointer" }}
         />
 

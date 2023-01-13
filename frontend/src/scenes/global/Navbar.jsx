@@ -38,9 +38,9 @@ function Navbar() {
         <Box
           onClick={() => navigate("/")}
           sx={{ "&:hover": { cursor: "pointer" } }}
-          color={shades.secondary[500]}
+          color="black"
         >
-          ECOMMER
+          TRCE
         </Box>
         <Box
           display="flex"

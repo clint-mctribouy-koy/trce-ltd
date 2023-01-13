@@ -10,6 +10,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../../theme";
 import { addToCart } from "../../state";
 import { useDispatch } from "react-redux";
+import axios from "axios";
 
 const ItemDetails = () => {
   const dispatch = useDispatch();
@@ -23,31 +24,46 @@ const ItemDetails = () => {
     setValue(newValue);
   };
 
-  async function getItem() {
-    const item = await fetch(
-      `http://localhost:2000/api/items/${itemId}?populate=image`,
-      {
-        method: "GET",
-      }
-    );
-    const itemJson = await item.json();
-    setItem(itemJson.data);
-  }
+  // async function getItem() {
+  //   const item = await fetch(
+  //     `http://localhost:2000/api/items/${itemId}?populate=image`,
+  //     {
+  //       method: "GET",
+  //     }
+  //   );
+  //   const itemJson = await item.json();
+  //   setItem(itemJson.data);
+  // }
 
-  async function getItems() {
-    const items = await fetch(
-      `http://localhost:2000/api/items?populate=image`,
-      {
-        method: "GET",
-      }
-    );
-    const itemsJson = await items.json();
-    setItems(itemsJson.data);
+  async function getItem() {
+    try {
+      const response = await axios.get(
+        " http://localhost:8000/api/products/070f925d-ced2-4ccc-8142-0b74d5be704d/"
+      );
+      setItem(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   useEffect(() => {
     getItem();
-    getItems();
+  }, []);
+
+  // async function getItems() {
+  //   const items = await fetch(
+  //     `http://localhost:2000/api/items?populate=image`,
+  //     {
+  //       method: "GET",
+  //     }
+  //   );
+  //   const itemsJson = await items.json();
+  //   setItems(itemsJson.data);
+  // }
+
+  useEffect(() => {
+    getItem();
+    // getItems();
   }, [itemId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -56,10 +72,10 @@ const ItemDetails = () => {
         {/* IMAGES */}
         <Box flex="1 1 40%" mb="40px">
           <img
-            alt={item?.name}
+            alt={item?.item_name}
             width="100%"
             height="100%"
-            src={`http://localhost:2000${item?.attributes?.image?.data?.attributes?.formats?.medium?.url}`}
+            src={item?.image}
             style={{ objectFit: "contain" }}
           />
         </Box>
@@ -72,8 +88,8 @@ const ItemDetails = () => {
           </Box>
 
           <Box m="65px 0 25px 0">
-            <Typography variant="h3">{item?.attributes?.name}</Typography>
-            <Typography>${item?.attributes?.price}</Typography>
+            <Typography variant="h3">{item?.item_name}</Typography>
+            <Typography>${item?.price}</Typography>
             <Typography sx={{ mt: "20px" }}>
               {item?.attributes?.longDescription}
             </Typography>
@@ -113,7 +129,7 @@ const ItemDetails = () => {
               <FavoriteBorderOutlinedIcon />
               <Typography sx={{ ml: "5px" }}>ADD TO WISHLIST</Typography>
             </Box>
-            <Typography>CATEGORIES: {item?.attributes?.category}</Typography>
+            {/* <Typography>CATEGORIES: {item?.attributes?.category}</Typography> */}
           </Box>
         </Box>
       </Box>
@@ -126,9 +142,7 @@ const ItemDetails = () => {
         </Tabs>
       </Box>
       <Box display="flex" flexWrap="wrap" gap="15px">
-        {value === "description" && (
-          <div>{item?.attributes?.longDescription}</div>
-        )}
+        {value === "description" && <div>{item?.description}</div>}
         {value === "reviews" && <div>reviews</div>}
       </Box>
 
@@ -137,7 +151,7 @@ const ItemDetails = () => {
         <Typography variant="h3" fontWeight="bold">
           Related Products
         </Typography>
-        <Box
+        {/* <Box
           mt="20px"
           display="flex"
           flexWrap="wrap"
@@ -147,7 +161,7 @@ const ItemDetails = () => {
           {items.slice(0, 4).map((item, i) => (
             <Item key={`${item.name}-${i}`} item={item} />
           ))}
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );

@@ -63,6 +63,7 @@ LABEL = (
 )
 
 class Item(models.Model) :
+    uuid = models.UUIDField(default=uuid.uuid4(), primary_key=True, db_index=True, editable=False)
     item_name = models.CharField(max_length=100)
     price = models.FloatField()
     discount_price = models.FloatField(blank=True, null=True)
