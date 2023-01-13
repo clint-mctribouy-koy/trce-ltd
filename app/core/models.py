@@ -14,7 +14,7 @@ def product_image_file_path(instance, filename):
     ext = os.path.splitext(filename)[1]
     filename = f'{uuid.uuid4()}{ext}'
 
-    return os.path.join('uploads', 'recipe', filename)
+    return os.path.join('uploads', 'items', filename)
 
 
 class UserManager(BaseUserManager):
@@ -68,6 +68,7 @@ class Item(models.Model) :
     discount_price = models.FloatField(blank=True, null=True)
     category = models.CharField(choices=CATEGORY, max_length=2)
     label = models.CharField(choices=LABEL, max_length=2)
+    image = models.ImageField(null=True, upload_to=product_image_file_path)
     description = models.TextField()
     
     def __str__(self):

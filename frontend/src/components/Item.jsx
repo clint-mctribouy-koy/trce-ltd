@@ -16,7 +16,7 @@ const Item = ({ item, width }) => {
     palette: { neutral },
   } = useTheme();
 
-  const { item_name, price } = item.attributes;
+  const { item_name, price, image } = item;
   // const {
   //   data: {
   //     attributes: {
@@ -26,6 +26,7 @@ const Item = ({ item, width }) => {
   //     },
   //   },
   // } = image;
+  console.log("HEY FUCK YOU", item.image, item.price, item.item_name);
 
   return (
     <Box width={width}>
@@ -34,14 +35,15 @@ const Item = ({ item, width }) => {
         onMouseOver={() => setIsHovered(true)}
         onMouseOut={() => setIsHovered(false)}
       >
-        {/* <img
-          alt={item.name}
+        <img
+          alt={item.item_name}
           width="300px"
           height="400px"
-          src={`http://localhost:2000${url}`}
-          onClick={() => navigate(`/item/${item.id}`)}
+          src={item.image}
+          // onClick={() => navigate(`/item/${item.id}`)}
           style={{ cursor: "pointer" }}
-        /> */}
+        />
+
         <Box
           display={isHovered ? "block" : "none"}
           position="absolute"

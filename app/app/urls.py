@@ -23,9 +23,14 @@ from rest_framework import routers
 router = routers.DefaultRouter()                   
 router.register(r'products', views.ProductView, 'product') 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls))             
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
+if settings.DEBUG:
+        urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
 

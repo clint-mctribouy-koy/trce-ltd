@@ -98,10 +98,10 @@ const ShoppingList = () => {
       >
         {value === "all" &&
           items.map((item, index) => (
-            // <Item item={item} key={`${item.item_name}-${item.id}`} />
-            <div key={index}>
-              <p>{item.item_name}</p>
-            </div>
+            <Item item={item} key={index} />
+            // <div key={index}>
+            //   <p>{item.item_name}</p>
+            // </div>
           ))}
         {/* {value === "newArrivals" &&
           newArrivalsItems.map((item) => (
