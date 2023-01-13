@@ -1,8 +1,11 @@
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from django.shortcuts import render
+from django.http import HttpResponse
 
-@api_view(['GET'])
-def send_some_data(request):
-    return Response({
-        "data": "Hello from django backend"
-    })
+from django.shortcuts import render
+from .serializers import TodoSerializer 
+from rest_framework import viewsets      
+from .models import Product             
+
+class ProductView(viewsets.ModelViewSet):  
+    serializer_class = ProductSerializer   
+    queryset = Product.objects.all() 
