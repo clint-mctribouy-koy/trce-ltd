@@ -51,26 +51,71 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
 
-class Product(models.Model):
-    """Product object"""
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
-    link = models.CharField(max_length=255, blank=True)
-    image = models.ImageField(null=True, upload_to=product_image_file_path)
-    brand = models.ForeignKey('BrandStore', on_delete=models.CASCADE)
+CATEGORY = (
+    ('S', 'Shirt'),
+    ('SP', 'Sport Wear'),
+    ('OW', 'Out Wear')
+)
+
+LABEL = (
+    ('N', 'New'),
+    ('BS', 'Best Seller')
+)
+
+class Item(models.Model) :
+    item_name = models.CharField(max_length=100)
+    price = models.FloatField()
+    discount_price = models.FloatField(blank=True, null=True)
+    category = models.CharField(choices=CATEGORY, max_length=2)
+    label = models.CharField(choices=LABEL, max_length=2)
+    description = models.TextField()
     
     def __str__(self):
-        return self.title
+        return self.item_name
 
-class BrandStore(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
-    products = models.ForeignKey('Product', on_delete=models.CASCADE)
+    def get_absolute_url(self):
+        return reverse("core:product", kwargs={
+            "pk" : self.pk
+        
+        })
+
+    def get_add_to_cart_url(self) :
+        return reverse("core:add-to-cart", kwargs={
+            "pk" : self.pk
+        })
+
+    def get_remove_from_cart_url(self) :
+        return reverse("core:remove-from-cart", kwargs={
+            "pk" : self.pk
+        })
+
+class OrderItem(models.Model) :
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    ordered = models.BooleanField(default=False)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+
 
     def __str__(self):
-        return self.name
+        return f"{self.quantity} of {self.item.item_name}"
+
+class Order(models.Model) :
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    items = models.ManyToManyField(OrderItem)
+    start_date = models.DateTimeField(auto_now_add=True)
+    ordered_date = models.DateTimeField()
+    ordered = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.user.username
+
+# class BrandStore(models.Model):
+#     name = models.CharField(max_length=255)
+#     description = models.CharField(max_length=255)
+#     products = models.ForeignKey('Product', on_delete=models.CASCADE)
+
+#     def __str__(self):
+#         return self.name
 
 
 
