@@ -7,44 +7,67 @@ import { Typography } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useDispatch, useSelector } from "react-redux";
 import { setItems } from "../../state";
+import axios from "axios";
 
 const ShoppingList = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [value, setValue] = useState("all");
-  const items = useSelector((state) => state.cart.items);
+  const [items, setItem] = useState([]);
+  // const items = useSelector((state) => state.cart.items);
   const breakPoint = useMediaQuery("(min-width:600px)");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  async function getItems() {
-    const items = await fetch(
-      "http://localhost:2000/api/items?populate=image",
-      { method: "GET" }
-    );
-    const itemsJson = await items.json();
-    dispatch(setItems(itemsJson.data));
+  // const fetchData = () => {
+  //   return fetch("http://localhost:8000/api/products/")
+  //     .then((response) => response.json)
+  //     .then((data) => setItem(data));
+  // };
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
+
+  async function fetchData() {
+    try {
+      const response = await axios.get("http://localhost:8000/api/products/");
+      setItem(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   useEffect(() => {
-    getItems();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    fetchData();
+  }, []);
+  // async function getItems() {
+  //   const items = await fetch("http://localhost:8000/api/products/", {
+  //     method: "GET",
+  //   });
+  //   const itemsJson = await items.json();
+  //   dispatch(setItems(itemsJson.data));
+  // }
 
-  const topRatedItems = items.filter(
-    (item) => item.attributes.category === "topRated"
-  );
-  const newArrivalsItems = items.filter(
-    (item) => item.attributes.category === "newArrivals"
-  );
-  const bestSellersItems = items.filter(
-    (item) => item.attributes.category === "bestSellers"
-  );
+  // useEffect(() => {
+  //   getItems();
+  // }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // const topRatedItems = items.filter(
+  //   (item) => item.attributes.category === "topRated"
+  // );
+  // const newArrivalsItems = items.filter(
+  //   (item) => item.attributes.category === "newArrivals"
+  // );
+  // const bestSellersItems = items.filter(
+  //   (item) => item.attributes.category === "bestSellers"
+  // );
+  // const items = [{}];
   return (
     <Box width="80%" margin="80px auto">
       <Typography variant="h3" textAlign="center">
-        Our Featured <b>Products</b>
+        Our Featured <b>ean</b>
       </Typography>
       <Tabs
         textColor="primary"
@@ -74,21 +97,24 @@ const ShoppingList = () => {
         columnGap="1.33%"
       >
         {value === "all" &&
-          items.map((item) => (
-            <Item item={item} key={`${item.name}-${item.id}`} />
+          items.map((item, index) => (
+            // <Item item={item} key={`${item.item_name}-${item.id}`} />
+            <div key={index}>
+              <p>{item.item_name}</p>
+            </div>
           ))}
-        {value === "newArrivals" &&
+        {/* {value === "newArrivals" &&
           newArrivalsItems.map((item) => (
-            <Item item={item} key={`${item.name}-${item.id}`} />
+            <Item item={item} key={`${item.item_name}-${item.id}`} />
           ))}
         {value === "bestSellers" &&
           bestSellersItems.map((item) => (
-            <Item item={item} key={`${item.name}-${item.id}`} />
+            <Item item={item} key={`${item.item_name}-${item.id}`} />
           ))}
         {value === "topRated" &&
           topRatedItems.map((item) => (
-            <Item item={item} key={`${item.name}-${item.id}`} />
-          ))}
+            <Item item={item} key={`${item.item_name}-${item.id}`} />
+          ))} */}
       </Box>
     </Box>
   );
