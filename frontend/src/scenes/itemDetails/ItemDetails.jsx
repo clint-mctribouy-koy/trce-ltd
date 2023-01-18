@@ -38,7 +38,7 @@ const ItemDetails = () => {
   async function getItem() {
     try {
       const response = await axios.get(
-        " http://localhost:8000/api/products/070f925d-ced2-4ccc-8142-0b74d5be704d/"
+        `http://localhost:8000/api/products/${itemId}`
       );
       setItem(response.data);
     } catch (error) {
