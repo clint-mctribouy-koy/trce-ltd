@@ -18,15 +18,22 @@ from core import views
 from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path,include               
-from rest_framework import routers                 
+from rest_framework import routers   
+from django.views.generic import TemplateView              
 
 router = routers.DefaultRouter()                   
-router.register(r'products', views.ProductView, 'product') 
+router.register(r'products', views.ProductView, 'product')
+router.register(r'orders', views.OrderView, 'order')
+
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls))             
+    path('api/', include(router.urls))  
+    # path('', TemplateView.as_view(template_name='index.html')),
+    # path('api/products/', include('core.urls.product_urls')),
+    # path('api/users/', include('core.urls.user_urls')),
+    # path('api/orders/', include('core.urls.order_urls')),          
 
 ] 
 if settings.DEBUG:

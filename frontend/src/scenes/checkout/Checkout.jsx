@@ -1,12 +1,13 @@
 import { useSelector } from "react-redux";
 import { Box, Button, Stepper, Step, StepLabel } from "@mui/material";
 import { Formik } from "formik";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as yup from "yup";
 import { shades } from "../../theme";
 import Payment from "./Payment";
 import Shipping from "./Shipping";
 import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
 
 const stripePromise = loadStripe(
   "pk_test_51MHt3GADbUssSGYMdWu8rMnUoqe2MhtMtV6ip00bzqlQBwAs5ogREQjK59zKDHLn7gUOLrehGwPTUpbEsTVbqmSu007Fq3B0xS"
@@ -47,16 +48,43 @@ const Checkout = () => {
       })),
     };
 
-    const response = await fetch("http://localhost:8000/api/orders", {
+    const response = await fetch("http://localhost:8000/api/orders/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),
     });
     const session = await response.json();
+    console.log("HELLO BITCH", session.id);
     await stripe.redirectToCheckout({
-      sessionId: session.id,
+      lineItems: [
+        {
+          price: "price_1MRn1WADbUssSGYMK9eHBX7J",
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      successUrl: `${window.location.origin}/success`,
+      cancelUrl: `${window.location.origin}/checkout`,
     });
   }
+
+  // const response = await axios.post("http://localhost:8000/api/orders")
+
+  // async function fetchData() {
+  //   try {
+  //     const response = await axios.post("http://localhost:8000/api/products/");
+  //     const session = await response.json();
+  //     await stripe.redirectToCheckout({
+  //       sessionId: session.id,
+  //     });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   return (
     <Box width="80%" m="100px auto">

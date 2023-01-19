@@ -7,6 +7,7 @@ from django.contrib.auth.models import (
 from django.conf import settings
 import uuid
 import os
+from django.utils import timezone
 
 
 def product_image_file_path(instance, filename):
@@ -64,52 +65,77 @@ LABEL = (
 
 class Item(models.Model) :
     uuid = models.UUIDField(default=uuid.uuid4(), primary_key=True, db_index=True, editable=False)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     item_name = models.CharField(max_length=100)
-    price = models.FloatField()
-    discount_price = models.FloatField(blank=True, null=True)
-    category = models.CharField(choices=CATEGORY, max_length=2)
     label = models.CharField(choices=LABEL, max_length=2)
     image = models.ImageField(null=True, upload_to=product_image_file_path)
-    description = models.TextField()
-    
+    brand = models.CharField(max_length=200, null=True, blank=True)
+    category = models.CharField(max_length=200, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    rating = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    numReviews = models.IntegerField(null=True, blank=True, default=0)
+    price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    countInStock = models.IntegerField(null=True, blank=True, default=0)
+    createdAt = models.DateTimeField(default=timezone.now)
+
     def __str__(self):
         return self.item_name
 
-    def get_absolute_url(self):
-        return reverse("core:product", kwargs={
-            "pk" : self.pk
-        
-        })
-
-    def get_add_to_cart_url(self) :
-        return reverse("core:add-to-cart", kwargs={
-            "pk" : self.pk
-        })
-
-    def get_remove_from_cart_url(self) :
-        return reverse("core:remove-from-cart", kwargs={
-            "pk" : self.pk
-        })
-
-class OrderItem(models.Model) :
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-    ordered = models.BooleanField(default=False)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
-
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    paymentMethod = models.CharField(max_length=200, null=True, blank=True)
+    taxPrice = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    shippingPrice = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    totalPrice = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    isPaid = models.BooleanField(default=False)
+    paidAt = models.DateTimeField(auto_now_add=False, null=True, blank=True)
+    isDelivered = models.BooleanField(default=False)
+    deliveredAt = models.DateTimeField(auto_now_add=False, null=True, blank=True)
+    createdAt = models.DateTimeField(default=timezone.now)
+    uuid = models.UUIDField(default=uuid.uuid4(), primary_key=True, db_index=True, editable=False)
 
     def __str__(self):
-        return f"{self.quantity} of {self.item.item_name}"
+        return str(self.createdAt)
 
-class Order(models.Model) :
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    items = models.ManyToManyField(OrderItem)
-    start_date = models.DateTimeField(auto_now_add=True)
-    ordered_date = models.DateTimeField()
-    ordered = models.BooleanField(default=False)
+class OrderItem(models.Model):
+    product = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
+    name = models.CharField(max_length=200, null=True, blank=True)
+    qty = models.IntegerField(null=True, blank=True, default=0)
+    price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    image = models.CharField(max_length=200, null=True, blank=True)
+    uuid = models.UUIDField(default=uuid.uuid4(), primary_key=True, db_index=True, editable=False)
 
     def __str__(self):
-        return self.user.username
+        return str(self.name)
+
+# class Review(models.Model):
+#     product = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True)
+#     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+#     name = models.CharField(max_length=200, null=True, blank=True)
+#     rating = models.IntegerField(null=True, blank=True, default=0)
+#     comment = models.TextField(null=True, blank=True)
+#     createdAt = models.DateTimeField(default=timezone.now)
+#     uuid = models.UUIDField(default=uuid.uuid4(), primary_key=True, db_index=True, editable=False)
+
+#     def __str__(self):
+#         return str(self.rating)
+
+# class ShippingAddress(models.Model):
+#     order = models.OneToOneField(Order, on_delete=models.CASCADE, null=True, blank=True)
+#     address = models.CharField(max_length=200, null=True, blank=True)
+#     city = models.CharField(max_length=200, null=True, blank=True)
+#     postalCode = models.CharField(max_length=200, null=True, blank=True)
+#     country = models.CharField(max_length=200, null=True, blank=True)
+#     shippingPrice = models.DecimalField(
+#         max_digits=7, decimal_places=2, null=True, blank=True)
+#     uuid = models.UUIDField(default=uuid.uuid4(), primary_key=True, db_index=True, editable=False)
+
+#     def __str__(self):
+#         return str(self.address)
+
+
+
 
 # class BrandStore(models.Model):
 #     name = models.CharField(max_length=255)

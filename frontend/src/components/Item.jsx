@@ -17,7 +17,6 @@ const Item = ({ item, width }) => {
   } = useTheme();
 
   const { item_name, price } = item;
-  console.log("HEY FUCK YOU", item.image, item.price, item.item_name);
 
   return (
     <Box width={width}>
@@ -61,6 +60,7 @@ const Item = ({ item, width }) => {
             <Button
               onClick={() => {
                 dispatch(addToCart({ item: { ...item, count } }));
+                console.log("LOOK HERE", item);
               }}
               sx={{ backgroundColor: shades.primary[300], color: "white" }}
             >

@@ -1,10 +1,10 @@
-"""
-Serializers for product APIs
-"""
-from rest_framework import serializers
-from .models import Item
+# """
+# Serializers for product APIs
+# """
+# from rest_framework import serializers
+# from .models import Item
 
-class ProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Item
-        fields = ('item_name', 'description', 'price')
+# class ProductSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Item
+#         fields = ('item_name', 'description', 'price')

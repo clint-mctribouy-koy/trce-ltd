@@ -46,12 +46,8 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(models.User, UserAdmin)
-
-# class ProductAdmin(admin.ModelAdmin):
-#     list = ('uuid','title', 'description','price')
-    
-
 admin.site.register(models.Item)
-
 admin.site.register(models.OrderItem)
 admin.site.register(models.Order)
+# admin.site.register(models.Review)
+# admin.site.register(models.ShippingAddress)
