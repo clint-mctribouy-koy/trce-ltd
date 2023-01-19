@@ -80,8 +80,8 @@ const MainCarousel = () => {
             margin={isNonMobile ? undefined : "0 auto"}
             maxWidth={isNonMobile ? undefined : "240px"}
           >
-            <Typography variant="h1">I LIKE CHICKEN</Typography>
-            <Typography fontWeight="bold">Discover More</Typography>
+            <Typography variant="h1">Lorem + Ipsum</Typography>
+            <Typography fontWeight="bold">Find out More</Typography>
           </Box>
         </Box>
       ))}

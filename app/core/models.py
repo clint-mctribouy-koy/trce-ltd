@@ -59,8 +59,9 @@ CATEGORY = (
 )
 
 LABEL = (
-    ('N', 'New'),
-    ('BS', 'Best Seller')
+    ('NA', 'New Arrival'),
+    ('BS', 'Best Seller'),
+    ('TR', 'Top Rated')
 )
 
 class Item(models.Model) :
@@ -82,6 +83,7 @@ class Item(models.Model) :
         return self.item_name
 
 class Order(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4(), primary_key=True, db_index=True, editable=False)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     paymentMethod = models.CharField(max_length=200, null=True, blank=True)
     taxPrice = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
@@ -92,7 +94,6 @@ class Order(models.Model):
     isDelivered = models.BooleanField(default=False)
     deliveredAt = models.DateTimeField(auto_now_add=False, null=True, blank=True)
     createdAt = models.DateTimeField(default=timezone.now)
-    uuid = models.UUIDField(default=uuid.uuid4(), primary_key=True, db_index=True, editable=False)
 
     def __str__(self):
         return str(self.createdAt)

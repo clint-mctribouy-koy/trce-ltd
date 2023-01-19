@@ -20,16 +20,6 @@ const ShoppingList = () => {
     setValue(newValue);
   };
 
-  // const fetchData = () => {
-  //   return fetch("http://localhost:8000/api/products/")
-  //     .then((response) => response.json)
-  //     .then((data) => setItem(data));
-  // };
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
   async function fetchData() {
     try {
       const response = await axios.get("http://localhost:8000/api/products/");
@@ -42,28 +32,11 @@ const ShoppingList = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  // async function getItems() {
-  //   const items = await fetch("http://localhost:8000/api/products/", {
-  //     method: "GET",
-  //   });
-  //   const itemsJson = await items.json();
-  //   dispatch(setItems(itemsJson.data));
-  // }
 
-  // useEffect(() => {
-  //   getItems();
-  // }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const topRatedItems = items.filter((item) => item.label === "TR");
+  const newArrivalsItems = items.filter((item) => item.label === "NA");
 
-  // const topRatedItems = items.filter(
-  //   (item) => item.attributes.category === "topRated"
-  // );
-  // const newArrivalsItems = items.filter(
-  //   (item) => item.attributes.category === "newArrivals"
-  // );
-  // const bestSellersItems = items.filter(
-  //   (item) => item.attributes.category === "bestSellers"
-  // );
-  // const items = [{}];
+  const bestSellersItems = items.filter((item) => item.label === "BS");
   return (
     <Box width="80%" margin="80px auto">
       <Typography variant="h3" textAlign="center">
@@ -97,13 +70,8 @@ const ShoppingList = () => {
         columnGap="1.33%"
       >
         {value === "all" &&
-          items.map((item, index) => (
-            <Item item={item} key={index} />
-            // <div key={index}>
-            //   <p>{item.item_name}</p>
-            // </div>
-          ))}
-        {/* {value === "newArrivals" &&
+          items.map((item, index) => <Item item={item} key={index} />)}
+        {value === "newArrivals" &&
           newArrivalsItems.map((item) => (
             <Item item={item} key={`${item.item_name}-${item.id}`} />
           ))}
@@ -114,7 +82,7 @@ const ShoppingList = () => {
         {value === "topRated" &&
           topRatedItems.map((item) => (
             <Item item={item} key={`${item.item_name}-${item.id}`} />
-          ))} */}
+          ))}
       </Box>
     </Box>
   );
