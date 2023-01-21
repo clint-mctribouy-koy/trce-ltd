@@ -63,7 +63,7 @@ const Checkout = () => {
         },
       ],
       mode: "payment",
-      successUrl: `${window.location.origin}/success`,
+      successUrl: `${window.location.origin}/checkout/success`,
       cancelUrl: `${window.location.origin}/checkout`,
     });
   }

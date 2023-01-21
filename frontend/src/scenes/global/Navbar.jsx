@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Badge, Box, IconButton } from "@mui/material";
+import { Badge, Box, IconButton, Button, MenuItem, Menu } from "@mui/material";
 import {
   PersonOutline,
   ShoppingBagOutlined,
@@ -9,11 +9,21 @@ import {
 import { useNavigate } from "react-router-dom";
 import { shades } from "../../theme";
 import { setIsCartOpen } from "../../state";
+import { bindTrigger, bindMenu } from "material-ui-popup-state/hooks";
+import PopupState from "material-ui-popup-state";
+import { Navbar, Nav, Container, Row, NavDropdown } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+import { logout } from "../../actions/userActions";
 
-function Navbar() {
+function NavigationBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
+  // const userLogin = useSelector((state) => state.userLogin);
+  // const { userInfo } = userLogin;
+  // const logoutHandler = () => {
+  //   dispatch(logout());
+  // };
 
   return (
     <Box
@@ -51,9 +61,58 @@ function Navbar() {
           <IconButton sx={{ color: "black" }}>
             <SearchOutlined />
           </IconButton>
-          <IconButton sx={{ color: "black" }}>
-            <PersonOutline />
-          </IconButton>
+
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState) => (
+              <>
+                <IconButton
+                  variant="contained"
+                  sx={{ color: "black" }}
+                  {...bindTrigger(popupState)}
+                >
+                  <PersonOutline />
+                </IconButton>
+
+                <Menu {...bindMenu(popupState)}>
+                  <MenuItem onClick={popupState.close}>Profile</MenuItem>
+                  <MenuItem onClick={popupState.close}>My Account</MenuItem>
+                  <MenuItem onClick={popupState.close}>Logout</MenuItem>
+                  {/* {userInfo ? (
+                    <NavDropdown title={userInfo.name} id="username">
+                      <LinkContainer to="/profile">
+                        <NavDropdown.Item>Profile</NavDropdown.Item>
+                      </LinkContainer>
+
+                      <NavDropdown.Item onClick={logoutHandler}>
+                        Logout
+                      </NavDropdown.Item>
+                    </NavDropdown>
+                  ) : (
+                    <LinkContainer to="/login">
+                      <Nav.Link>
+                        <i className="fas fa-user"></i>Login
+                      </Nav.Link>
+                    </LinkContainer>
+                  )}
+                  {userInfo && userInfo.isAdmin && (
+                    <NavDropdown title="Admin" id="adminmenue">
+                      <LinkContainer to="/admin/userlist">
+                        <NavDropdown.Item>Users</NavDropdown.Item>
+                      </LinkContainer>
+
+                      <LinkContainer to="/admin/productlist">
+                        <NavDropdown.Item>Products</NavDropdown.Item>
+                      </LinkContainer>
+
+                      <LinkContainer to="/admin/orderlist">
+                        <NavDropdown.Item>Orders</NavDropdown.Item>
+                      </LinkContainer>
+                    </NavDropdown>
+                  )} */}
+                </Menu>
+              </>
+            )}
+          </PopupState>
           <Badge
             badgeContent={cart.length}
             color="secondary"
@@ -75,13 +134,30 @@ function Navbar() {
               <ShoppingBagOutlined />
             </IconButton>
           </Badge>
-          <IconButton sx={{ color: "black" }}>
-            <MenuOutlined />
-          </IconButton>
+
+          <PopupState variant="popover" popupId="demo-popup-menu">
+            {(popupState) => (
+              <>
+                <IconButton
+                  variant="contained"
+                  sx={{ color: "black" }}
+                  {...bindTrigger(popupState)}
+                >
+                  <MenuOutlined />
+                </IconButton>
+
+                <Menu {...bindMenu(popupState)}>
+                  <MenuItem onClick={popupState.close}>TRCE</MenuItem>
+                  <MenuItem onClick={popupState.close}>NAGARE</MenuItem>
+                  <MenuItem onClick={popupState.close}>BAND.03</MenuItem>
+                </Menu>
+              </>
+            )}
+          </PopupState>
         </Box>
       </Box>
     </Box>
   );
 }
 
-export default Navbar;
+export default NavigationBar;
