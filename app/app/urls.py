@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from core import views
+from user import views as user_views
 from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path,include               
@@ -27,9 +28,11 @@ router.register(r'orders', views.OrderView, 'order')
 
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls))  
+    path('api/', include(router.urls)), 
+    path('api/users/', include('core.urls.user_urls')) 
     # path('', TemplateView.as_view(template_name='index.html')),
     # path('api/products/', include('core.urls.product_urls')),
     # path('api/users/', include('core.urls.user_urls')),

@@ -33,10 +33,10 @@ const ShoppingList = () => {
     fetchData();
   }, []);
 
-  const topRatedItems = items.filter((item) => item.label === "TR");
-  const newArrivalsItems = items.filter((item) => item.label === "NA");
+  const topRatedItems = items.filter((item) => item.category === "TR");
+  const newArrivalsItems = items.filter((item) => item.category === "NA");
 
-  const bestSellersItems = items.filter((item) => item.label === "BS");
+  const bestSellersItems = items.filter((item) => item.category === "BS");
   return (
     <Box width="80%" margin="80px auto">
       <Typography variant="h3" textAlign="center">
@@ -73,15 +73,15 @@ const ShoppingList = () => {
           items.map((item, index) => <Item item={item} key={index} />)}
         {value === "newArrivals" &&
           newArrivalsItems.map((item) => (
-            <Item item={item} key={`${item.item_name}-${item.id}`} />
+            <Item item={item} key={`${item.name}-${item._id}`} />
           ))}
         {value === "bestSellers" &&
           bestSellersItems.map((item) => (
-            <Item item={item} key={`${item.item_name}-${item.id}`} />
+            <Item item={item} key={`${item.name}-${item._id}`} />
           ))}
         {value === "topRated" &&
           topRatedItems.map((item) => (
-            <Item item={item} key={`${item.item_name}-${item.id}`} />
+            <Item item={item} key={`${item.name}-${item._id}`} />
           ))}
       </Box>
     </Box>

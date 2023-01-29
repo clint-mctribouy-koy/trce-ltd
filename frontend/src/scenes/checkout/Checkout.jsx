@@ -54,7 +54,6 @@ const Checkout = () => {
       body: JSON.stringify(requestBody),
     });
     const session = await response.json();
-    console.log("HELLO BITCH", session.id);
     await stripe.redirectToCheckout({
       lineItems: [
         {
@@ -67,24 +66,6 @@ const Checkout = () => {
       cancelUrl: `${window.location.origin}/checkout`,
     });
   }
-
-  // const response = await axios.post("http://localhost:8000/api/orders")
-
-  // async function fetchData() {
-  //   try {
-  //     const response = await axios.post("http://localhost:8000/api/products/");
-  //     const session = await response.json();
-  //     await stripe.redirectToCheckout({
-  //       sessionId: session.id,
-  //     });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
 
   return (
     <Box width="80%" m="100px auto">
