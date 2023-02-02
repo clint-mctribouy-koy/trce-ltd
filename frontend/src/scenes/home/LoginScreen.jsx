@@ -1,75 +1,125 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import Loader from "../../components/Loader";
-import Message from "../../components/Message";
-import FormContainer from "../../components/FormContainer";
-import { login } from "../../actions/userActions";
+import React, { useState } from "react";
+import { Link, redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import axios from "axios";
 
-function LoginScreen({ location, history }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const load_user = () => async (dispatch) => {
+  if (localStorage.getItem("access")) {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `JWT ${localStorage.getItem("access")}`,
+        Accept: "application/json",
+      },
+    };
 
-  const dispatch = useDispatch();
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/account/auth/users/me/`,
+        config
+      );
 
-  // const redirect = location.search ? location.search.split("=")[1] : "/";
-
-  // const userLogin = useSelector((state) => state.userLogin);
-  // const { error, loading, userInfo } = userLogin;
-
-  // useEffect(() => {
-  //   if (userInfo) {
-  //     history.push(redirect);
-  //   }
-  // }, [history, userInfo, redirect]);
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-    dispatch(login(email, password));
+      dispatch({
+        type: "USER_LOADED_SUCCESS",
+        payload: res.data,
+      });
+    } catch (err) {
+      dispatch({
+        type: "USER_LOADED_FAIL",
+      });
+    }
+  } else {
+    dispatch({
+      type: "USER_LOADED_FAIL",
+    });
+  }
+};
+const login = (email, password) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
   };
 
+  const body = JSON.stringify({ email, password });
+
+  try {
+    const res = await axios.post(
+      `http://localhost:8000/account/auth/jwt/create/`,
+      body,
+      config
+    );
+
+    dispatch({
+      type: "LOGIN_SUCCESS",
+      payload: res.data,
+    });
+
+    dispatch(load_user());
+  } catch (err) {
+    dispatch({
+      type: "LOGIN_FAIL",
+    });
+  }
+};
+
+const LoginScreen = ({ login, isAuthenticated }) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const { email, password } = formData;
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    login(email, password);
+  };
+
+  if (isAuthenticated) {
+    return redirect("/");
+  }
+
   return (
-    <FormContainer className="mt-5">
+    <div className="container mt-10">
       <h1>Sign In</h1>
-      {/* {error && <Message variant="danger">{error}</Message>}
-      {loading && <Loader />} */}
-      <Form onSubmit={submitHandler}>
-        <Form.Group controlId="email">
-          <Form.Label>Email Address</Form.Label>
-          <Form.Control
+      <p>Sign into your Account</p>
+      <form onSubmit={(e) => onSubmit(e)}>
+        <div className="form-group">
+          <input
+            className="form-control"
             type="email"
-            placeholder="Enter Email"
+            placeholder="Email"
+            name="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
+            onChange={(e) => onChange(e)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            className="form-control"
             type="password"
-            placeholder="Enter Password"
+            placeholder="Password"
+            name="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Button type="submit" variant="primary">
-          Sign In
-        </Button>
-      </Form>
-
-      <Row className="py-3">
-        <Col>
-          New Customer?{" "}
-          {/* <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}> */}
-          Register
-          {/* </Link> */}
-        </Col>
-      </Row>
-    </FormContainer>
+            onChange={(e) => onChange(e)}
+            minLength="6"
+            required
+          />
+        </div>
+        <button className="btn btn-primary" type="submit">
+          Login
+        </button>
+      </form>
+    </div>
   );
-}
+};
 
-export default LoginScreen;
+// const mapStateToProps = (state) => ({
+//   isAuthenticated: state.auth.isAuthenticated,
+// });
+
+export default connect(null, { login })(LoginScreen);

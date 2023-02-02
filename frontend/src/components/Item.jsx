@@ -16,7 +16,7 @@ const Item = ({ item, width }) => {
     palette: { neutral },
   } = useTheme();
 
-  const { item_name, price } = item;
+  const { name, price } = item;
 
   return (
     <Box width={width}>
@@ -26,7 +26,7 @@ const Item = ({ item, width }) => {
         onMouseOut={() => setIsHovered(false)}
       >
         <img
-          alt={item.item_name}
+          alt={item.name}
           width="300px"
           height="400px"
           src={item.image}
@@ -76,7 +76,7 @@ const Item = ({ item, width }) => {
             .replace(/([A-Z])/g, " $1")
             .replace(/^./, (str) => str.toUpperCase())}
         </Typography> */}
-        <Typography>{item_name}</Typography>
+        <Typography>{name}</Typography>
         <Typography fontWeight="bold">${price}</Typography>
       </Box>
     </Box>

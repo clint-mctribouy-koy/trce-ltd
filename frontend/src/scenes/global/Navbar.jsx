@@ -7,23 +7,14 @@ import {
   SearchOutlined,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { shades } from "../../theme";
 import { setIsCartOpen } from "../../state";
 import { bindTrigger, bindMenu } from "material-ui-popup-state/hooks";
 import PopupState from "material-ui-popup-state";
-import { Navbar, Nav, Container, Row, NavDropdown } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
-import { logout } from "../../actions/userActions";
 
 function NavigationBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
-  // const userLogin = useSelector((state) => state.userLogin);
-  // const { userInfo } = userLogin;
-  // const logoutHandler = () => {
-  //   dispatch(logout());
-  // };
 
   return (
     <Box
@@ -77,38 +68,6 @@ function NavigationBar() {
                   <MenuItem onClick={popupState.close}>Profile</MenuItem>
                   <MenuItem onClick={popupState.close}>My Account</MenuItem>
                   <MenuItem onClick={popupState.close}>Logout</MenuItem>
-                  {/* {userInfo ? (
-                    <NavDropdown title={userInfo.name} id="username">
-                      <LinkContainer to="/profile">
-                        <NavDropdown.Item>Profile</NavDropdown.Item>
-                      </LinkContainer>
-
-                      <NavDropdown.Item onClick={logoutHandler}>
-                        Logout
-                      </NavDropdown.Item>
-                    </NavDropdown>
-                  ) : (
-                    <LinkContainer to="/login">
-                      <Nav.Link>
-                        <i className="fas fa-user"></i>Login
-                      </Nav.Link>
-                    </LinkContainer>
-                  )}
-                  {userInfo && userInfo.isAdmin && (
-                    <NavDropdown title="Admin" id="adminmenue">
-                      <LinkContainer to="/admin/userlist">
-                        <NavDropdown.Item>Users</NavDropdown.Item>
-                      </LinkContainer>
-
-                      <LinkContainer to="/admin/productlist">
-                        <NavDropdown.Item>Products</NavDropdown.Item>
-                      </LinkContainer>
-
-                      <LinkContainer to="/admin/orderlist">
-                        <NavDropdown.Item>Orders</NavDropdown.Item>
-                      </LinkContainer>
-                    </NavDropdown>
-                  )} */}
                 </Menu>
               </>
             )}

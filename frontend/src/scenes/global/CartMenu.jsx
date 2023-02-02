@@ -25,9 +25,9 @@ const CartMenu = () => {
   const cart = useSelector((state) => state.cart.cart);
   const isCartOpen = useSelector((state) => state.cart.isCartOpen);
 
-  // const totalPrice = cart.reduce((total, item) => {
-  //   return total + item.count * item.price;
-  // }, 0);
+  const totalPrice = cart.reduce((total, item) => {
+    return total + item.count * item.price;
+  }, 0);
 
   return (
     <Box
@@ -52,7 +52,7 @@ const CartMenu = () => {
         <Box padding="30px" overflow="auto" height="100%">
           {/* HEADER */}
           <FlexBox mb="15px">
-            <Typography variant="h3">SHOPPING BAG ({cart.length})</Typography>
+            <Typography variant="h3">SHOPPING CART ({cart.length})</Typography>
             <IconButton onClick={() => dispatch(setIsCartOpen({}))}>
               <CloseIcon />
             </IconButton>
@@ -61,7 +61,7 @@ const CartMenu = () => {
           {/* CART LIST */}
           <Box>
             {cart.map((item) => (
-              <Box key={`${item.item_name}-${item.id}`}>
+              <Box key={`${item.name}-${item.id}`}>
                 <FlexBox p="15px 0">
                   <Box flex="1 1 40%">
                     <img
@@ -73,9 +73,7 @@ const CartMenu = () => {
                   </Box>
                   <Box flex="1 1 60%">
                     <FlexBox mb="5px">
-                      <Typography fontWeight="bold">
-                        {item.item_name}
-                      </Typography>
+                      <Typography fontWeight="bold">{item.name}</Typography>
                       <IconButton
                         onClick={() =>
                           dispatch(removeFromCart({ id: item.id }))
@@ -120,7 +118,7 @@ const CartMenu = () => {
           <Box m="20px 0">
             <FlexBox m="20px 0">
               <Typography fontWeight="bold">SUBTOTAL</Typography>
-              {/* <Typography fontWeight="bold">${totalPrice}</Typography> */}
+              <Typography fontWeight="bold">${totalPrice}</Typography>
             </FlexBox>
             <Button
               sx={{

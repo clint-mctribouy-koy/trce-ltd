@@ -24,17 +24,6 @@ const ItemDetails = () => {
     setValue(newValue);
   };
 
-  // async function getItem() {
-  //   const item = await fetch(
-  //     `http://localhost:2000/api/items/${itemId}?populate=image`,
-  //     {
-  //       method: "GET",
-  //     }
-  //   );
-  //   const itemJson = await item.json();
-  //   setItem(itemJson.data);
-  // }
-
   async function getItem() {
     try {
       const response = await axios.get(
@@ -50,17 +39,6 @@ const ItemDetails = () => {
     getItem();
   }, []);
 
-  // async function getItems() {
-  //   const items = await fetch(
-  //     `http://localhost:2000/api/items?populate=image`,
-  //     {
-  //       method: "GET",
-  //     }
-  //   );
-  //   const itemsJson = await items.json();
-  //   setItems(itemsJson.data);
-  // }
-
   useEffect(() => {
     getItem();
     // getItems();
@@ -72,7 +50,7 @@ const ItemDetails = () => {
         {/* IMAGES */}
         <Box flex="1 1 40%" mb="40px">
           <img
-            alt={item?.item_name}
+            alt={item?.name}
             width="100%"
             height="100%"
             src={item?.image}
@@ -88,7 +66,7 @@ const ItemDetails = () => {
           </Box>
 
           <Box m="65px 0 25px 0">
-            <Typography variant="h3">{item?.item_name}</Typography>
+            <Typography variant="h3">{item?.name}</Typography>
             <Typography>${item?.price}</Typography>
             <Typography sx={{ mt: "20px" }}>
               {item?.attributes?.longDescription}
@@ -151,17 +129,6 @@ const ItemDetails = () => {
         <Typography variant="h3" fontWeight="bold">
           Related Products
         </Typography>
-        {/* <Box
-          mt="20px"
-          display="flex"
-          flexWrap="wrap"
-          columnGap="1.33%"
-          justifyContent="space-between"
-        >
-          {items.slice(0, 4).map((item, i) => (
-            <Item key={`${item.name}-${i}`} item={item} />
-          ))}
-        </Box> */}
       </Box>
     </Box>
   );
