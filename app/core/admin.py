@@ -47,7 +47,7 @@ from core import models
 
 # admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Product)
-# admin.site.register(models.OrderItem)
+admin.site.register(models.UserAccount)
 admin.site.register(models.Order)
 # admin.site.register(models.Review)
 # admin.site.register(models.ShippingAddress)

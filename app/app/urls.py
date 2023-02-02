@@ -32,7 +32,7 @@ router.register(r'orders', views.OrderView, 'order')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)), 
-    path('api/users/', include('core.urls.user_urls')) 
+    path('account/', include('core.urls.user_urls')) 
     # path('', TemplateView.as_view(template_name='index.html')),
     # path('api/products/', include('core.urls.product_urls')),
     # path('api/users/', include('core.urls.user_urls')),
