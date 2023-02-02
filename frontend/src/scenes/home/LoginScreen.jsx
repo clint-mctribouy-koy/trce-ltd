@@ -13,16 +13,16 @@ function LoginScreen({ location, history }) {
 
   const dispatch = useDispatch();
 
-  const redirect = location.search ? location.search.split("=")[1] : "/";
+  // const redirect = location.search ? location.search.split("=")[1] : "/";
 
-  const userLogin = useSelector((state) => state.userLogin);
-  const { error, loading, userInfo } = userLogin;
+  // const userLogin = useSelector((state) => state.userLogin);
+  // const { error, loading, userInfo } = userLogin;
 
-  useEffect(() => {
-    if (userInfo) {
-      history.push(redirect);
-    }
-  }, [history, userInfo, redirect]);
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     history.push(redirect);
+  //   }
+  // }, [history, userInfo, redirect]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -30,10 +30,10 @@ function LoginScreen({ location, history }) {
   };
 
   return (
-    <FormContainer>
+    <FormContainer className="mt-5">
       <h1>Sign In</h1>
-      {error && <Message variant="danger">{error}</Message>}
-      {loading && <Loader />}
+      {/* {error && <Message variant="danger">{error}</Message>}
+      {loading && <Loader />} */}
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="email">
           <Form.Label>Email Address</Form.Label>
@@ -63,9 +63,9 @@ function LoginScreen({ location, history }) {
       <Row className="py-3">
         <Col>
           New Customer?{" "}
-          <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
-            Register
-          </Link>
+          {/* <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}> */}
+          Register
+          {/* </Link> */}
         </Col>
       </Row>
     </FormContainer>
