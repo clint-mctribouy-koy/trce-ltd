@@ -1,7 +1,7 @@
 import ShoppingList from "./ShoppingList";
 import MainCarousel from "./MainCarousel";
 
-function Home() {
+function Home({ history }) {
   return (
     <div className="home">
       <MainCarousel />

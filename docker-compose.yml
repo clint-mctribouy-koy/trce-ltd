@@ -29,9 +29,10 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/app/frontend/
+
     environment:
       - NODE_ENV=development
-      - CHOKIDAR_USEPOLLING=true
+      # - WATCHPACK_POLLING=true
 
   db:
     image: postgres:13-alpine

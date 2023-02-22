@@ -1,125 +1,75 @@
-import React, { useState } from "react";
-import { Link, redirect } from "react-router-dom";
-import { connect } from "react-redux";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Form, Button, Row, Col } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../global/Loader";
+import Message from "../global/Message";
+import FormContainer from "../global/FormContainer";
+import { login } from "../../actions/userActions";
 
-const load_user = () => async (dispatch) => {
-  if (localStorage.getItem("access")) {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `JWT ${localStorage.getItem("access")}`,
-        Accept: "application/json",
-      },
-    };
+function LoginScreen({ location, history }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    try {
-      const res = await axios.get(
-        `http://localhost:8000/account/auth/users/me/`,
-        config
-      );
+  const dispatch = useDispatch();
 
-      dispatch({
-        type: "USER_LOADED_SUCCESS",
-        payload: res.data,
-      });
-    } catch (err) {
-      dispatch({
-        type: "USER_LOADED_FAIL",
-      });
+  const redirect = "/login";
+
+  const userLogin = useSelector((state) => state.userInfo.userInfo);
+  const { error, loading, userInfo } = userLogin;
+
+  useEffect(() => {
+    if (userInfo) {
+      history.push(redirect);
     }
-  } else {
-    dispatch({
-      type: "USER_LOADED_FAIL",
-    });
-  }
-};
-const login = (email, password) => async (dispatch) => {
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
+  }, [history, userInfo, redirect]);
 
-  const body = JSON.stringify({ email, password });
-
-  try {
-    const res = await axios.post(
-      `http://localhost:8000/account/auth/jwt/create/`,
-      body,
-      config
-    );
-
-    dispatch({
-      type: "LOGIN_SUCCESS",
-      payload: res.data,
-    });
-
-    dispatch(load_user());
-  } catch (err) {
-    dispatch({
-      type: "LOGIN_FAIL",
-    });
-  }
-};
-
-const LoginScreen = ({ login, isAuthenticated }) => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const { email, password } = formData;
-  const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const onSubmit = (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
-
-    login(email, password);
+    dispatch(login(email, password));
   };
-
-  if (isAuthenticated) {
-    return redirect("/");
-  }
 
   return (
-    <div className="container mt-10">
+    <FormContainer>
       <h1>Sign In</h1>
-      <p>Sign into your Account</p>
-      <form onSubmit={(e) => onSubmit(e)}>
-        <div className="form-group">
-          <input
-            className="form-control"
+      {error && <Message variant="danger">{error}</Message>}
+      {loading && <Loader />}
+      <Form onSubmit={submitHandler}>
+        <Form.Group controlId="email">
+          <Form.Label>Email Address</Form.Label>
+          <Form.Control
             type="email"
-            placeholder="Email"
-            name="email"
+            placeholder="Enter Email"
             value={email}
-            onChange={(e) => onChange(e)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <input
-            className="form-control"
+            onChange={(e) => setEmail(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+
+        <Form.Group controlId="password">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
             type="password"
-            placeholder="Password"
-            name="password"
+            placeholder="Enter Password"
             value={password}
-            onChange={(e) => onChange(e)}
-            minLength="6"
-            required
-          />
-        </div>
-        <button className="btn btn-primary" type="submit">
-          Login
-        </button>
-      </form>
-    </div>
+            onChange={(e) => setPassword(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+
+        <Button type="submit" variant="primary">
+          Sign In
+        </Button>
+      </Form>
+
+      <Row className="py-3">
+        <Col>
+          New Customer?{" "}
+          {/* <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
+            Register
+          </Link> */}
+        </Col>
+      </Row>
+    </FormContainer>
   );
-};
+}
 
-// const mapStateToProps = (state) => ({
-//   isAuthenticated: state.auth.isAuthenticated,
-// });
-
-export default connect(null, { login })(LoginScreen);
+export default LoginScreen;

@@ -1,6 +1,7 @@
 """
 Views for the user API.
 """
+from core.models import UserAccount
 from rest_framework import generics, authentication, permissions
 
 from rest_framework.decorators import api_view, permission_classes
@@ -20,6 +21,7 @@ from rest_framework import status
 
 from user.serializers import (
     UserSerializer,
+    UserSerializerWithToken,
     # AuthTokenSerializer,
 )
 
@@ -43,9 +45,9 @@ class MyTokenObtainPairView(TokenObtainPairView):
 def registerUser(request):
     data = request.data
     try:
-        user = User.objects.create(
+        user = UserAccount.objects.create(
             first_name=data['name'],
-            username=data['email'],
+            # username=data['email'],
             email=data['email'],
             password=make_password(data['password'])
         )
@@ -65,7 +67,7 @@ def updateUserProfile(request):
 
     data = request.data
     user.first_name = data['name']
-    user.username = data['email']
+    # user.username = data['email']
     user.email = data['email']
 
     if data['password'] != '':
@@ -87,7 +89,7 @@ def getUserProfile(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getUsers(request):
-    users = User.objects.all()
+    users = UserAccount.objects.all()
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
 
@@ -95,7 +97,7 @@ def getUsers(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getUserById(request, pk):
-    user = User.objects.get(id=pk)
+    user = UserAccount.objects.get(id=pk)
     serializer = UserSerializer(user, many=False)
     return Response(serializer.data)
 
@@ -103,12 +105,12 @@ def getUserById(request, pk):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def updateUser(request, pk):
-    user = User.objects.get(id=pk)
+    user = UserAccount.objects.get(id=pk)
 
     data = request.data
 
     user.first_name = data['name']
-    user.username = data['email']
+    # user.username = data['email']
     user.email = data['email']
     user.is_staff = data['isAdmin']
 
@@ -122,6 +124,6 @@ def updateUser(request, pk):
 @api_view(['DELETE'])
 @permission_classes([IsAdminUser])
 def deleteUser(request, pk):
-    userForDeletion = User.objects.get(id=pk)
+    userForDeletion = UserAccount.objects.get(id=pk)
     userForDeletion.delete()
     return Response('User was deleted')
