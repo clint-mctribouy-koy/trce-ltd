@@ -42,10 +42,8 @@ INSTALLED_APPS = [
     'core', 
     'corsheaders',
     'rest_framework',
-    'rest_framework.authtoken',
     'rest_framework_simplejwt',
-    # 'drf_spectacular',
-    'user',
+    'rest_framework_simplejwt.token_blacklist',
     'djoser',
 ]
 
@@ -153,14 +151,15 @@ AUTH_USER_MODEL = 'core.UserAccount'
 
 
 
-CORS_ORIGIN_ALLOW_ALL = True
-
-
-CORS_ALLOW_CREDENTIALS = True
-
-CORS_ORIGIN_WHITELIST = [
-    'http://127.0.0.1:8000',
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
+CORS_ORIGIN_WHITELIST = [
+     "http://localhost:3000",
+     "http://127.0.0.1:3000", 
+]
+CORS_ALLOW_CREDENTIALS = True
 
 
 
@@ -205,6 +204,7 @@ DJOSER = {
     'SERIALIZERS':{
         'user_create':'core.serializers.UserCreateSerializer', 
         'user': 'core.serializers.UserCreateSerializer',
+        'current_user': 'accounts.serializers.UserCreateSerializer',
         'user_delete': 'djoser.serializers.UserDeleteSeializer'
     },
 }

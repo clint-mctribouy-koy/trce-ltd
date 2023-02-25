@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -14,7 +15,7 @@ import axios from "axios";
 
 const ItemDetails = () => {
   const dispatch = useDispatch();
-  const { itemId } = useParams();
+  const { id } = useParams();
   const [value, setValue] = useState("description");
   const [count, setCount] = useState(1);
   const [item, setItem] = useState(null);
@@ -27,7 +28,7 @@ const ItemDetails = () => {
   async function getItem() {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/products/${itemId}`
+        `http://localhost:8000/api/products/${id}`
       );
       setItem(response.data);
     } catch (error) {
@@ -37,12 +38,7 @@ const ItemDetails = () => {
 
   useEffect(() => {
     getItem();
-  }, []);
-
-  useEffect(() => {
-    getItem();
-    // getItems();
-  }, [itemId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [id]);
 
   return (
     <Box width="80%" m="80px auto">

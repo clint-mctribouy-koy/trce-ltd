@@ -1,3 +1,0 @@
-# """
-# Serializers for product APIs
-# """

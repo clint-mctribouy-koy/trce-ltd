@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from core import views
-from user import views as user_views
 from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path,include               
