@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-orant5yy*=^4i^xq2q*3=wp)91gf_wdo7ci@#cl0c_hh02v##4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -43,7 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
-    'drf_spectacular',
+    # 'drf_spectacular',
     'user',
     'djoser',
 ]
@@ -64,7 +65,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -131,6 +132,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'build/static')
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/static/media/'
 
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
@@ -147,9 +152,6 @@ AUTH_USER_MODEL = 'core.UserAccount'
 
 
 
-SPECTACULAR_SETTINGS = {
-    'COMPONENT_SPLIT_REQUEST': True,
-}
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -157,19 +159,19 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:8000',
+    'http://127.0.0.1:8000',
 ]
-# CORS_ORIGIN_WHITELIST = (
-#     'localhost:3000',
-# )
+
+
+
 
 REST_FRAMEWORK = {
-     'DEFAULT_PERMISSION_CLASSES': [
+    'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
     ],
-    # 'DEFAULT_AUTHENTICATION_CLASSES': (
-    #     'rest_framework_simplejwt.authentication.JWTAuthentication',
-    # )
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
 }
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -187,6 +189,7 @@ SIMPLE_JWT = {
     )
 }
 
+
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': True,
@@ -199,6 +202,9 @@ DJOSER = {
     'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': 'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
-
-
+    'SERIALIZERS':{
+        'user_create':'core.serializers.UserCreateSerializer', 
+        'user': 'core.serializers.UserCreateSerializer',
+        'user_delete': 'djoser.serializers.UserDeleteSeializer'
+    },
 }

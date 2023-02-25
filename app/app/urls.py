@@ -33,12 +33,8 @@ router.register(r'orders', views.OrderView, 'order')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)), 
-    path('api/users/', include('core.urls.user_urls')) 
-    # path('', TemplateView.as_view(template_name='index.html')),
-    # path('api/products/', include('core.urls.product_urls')),
-    # path('api/users/', include('core.urls.user_urls')),
-    # path('api/orders/', include('core.urls.order_urls')),          
-
+    path('api/users/', include('core.urls.user_urls')),
+  
 ] 
 if settings.DEBUG:
         urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
