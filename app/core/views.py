@@ -11,10 +11,12 @@ from .models import Product, Order
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 
-class ProductView(viewsets.ModelViewSet):  
+class ProductView(viewsets.ModelViewSet): 
+    permission_classes = ()
     serializer_class = ProductSerializer   
     queryset = Product.objects.all() 
 
-class OrderView(viewsets.ModelViewSet):  
+class OrderView(viewsets.ModelViewSet): 
+    permission_classes = () 
     serializer_class = OrderSerializer   
     queryset = Order.objects.all() 
