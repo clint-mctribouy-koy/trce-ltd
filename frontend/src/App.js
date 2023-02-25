@@ -8,7 +8,9 @@ import CartMenu from "./scenes/global/CartMenu";
 import Checkout from "./scenes/checkout/Checkout";
 import Confirmation from "./scenes/checkout/Confirmation";
 import LoginScreen from "./scenes/home/LoginScreen";
-
+import { Provider } from "react-redux";
+import store from "./store";
+import Layout from "./components/Layout";
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -21,22 +23,22 @@ const ScrollToTop = () => {
 
 function App() {
   return (
-    <div className="app">
+    <Provider store={store}>
       <BrowserRouter>
-        <NavigationBar />
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="item/:itemId" element={<ItemDetails />} />
-          <Route path="checkout" element={<Checkout />} />
-          <Route path="checkout/success" element={<Confirmation />} />
-          <Route path="/login" element={<LoginScreen />} />
-          {/* <Route path="/admin" element={<LoginScreen />} /> */}
-        </Routes>
-        <CartMenu />
-        <Footer />
+        <Layout>
+          <ScrollToTop />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="item/:itemId" element={<ItemDetails />} />
+            <Route path="checkout" element={<Checkout />} />
+            <Route path="checkout/success" element={<Confirmation />} />
+            <Route path="/login" element={<LoginScreen />} />
+          </Routes>
+          <CartMenu />
+          <Footer />
+        </Layout>
       </BrowserRouter>
-    </div>
+    </Provider>
   );
 }
 

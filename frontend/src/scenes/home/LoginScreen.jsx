@@ -1,75 +1,74 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import Loader from "../global/Loader";
-import Message from "../global/Message";
-import FormContainer from "../global/FormContainer";
-import { login } from "../../actions/userActions";
+import React, { useState } from "react";
+import { Link, redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { login } from "../../actions/auth";
 
-function LoginScreen({ location, history }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const LoginScreen = ({ login, isAuthenticated }) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  const dispatch = useDispatch();
+  const { email, password } = formData;
 
-  const redirect = "/login";
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const userLogin = useSelector((state) => state.userInfo.userInfo);
-  const { error, loading, userInfo } = userLogin;
-
-  useEffect(() => {
-    if (userInfo) {
-      history.push(redirect);
-    }
-  }, [history, userInfo, redirect]);
-
-  const submitHandler = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(email, password));
+
+    login(email, password);
   };
 
+  if (isAuthenticated) {
+    return redirect("/");
+  }
+
   return (
-    <FormContainer>
+    <div className="container mt-5">
       <h1>Sign In</h1>
-      {error && <Message variant="danger">{error}</Message>}
-      {loading && <Loader />}
-      <Form onSubmit={submitHandler}>
-        <Form.Group controlId="email">
-          <Form.Label>Email Address</Form.Label>
-          <Form.Control
+      <p>Sign into your Account</p>
+      <form onSubmit={(e) => onSubmit(e)}>
+        <div className="form-group">
+          <input
+            className="form-control"
             type="email"
-            placeholder="Enter Email"
+            placeholder="Email"
+            name="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
+            onChange={(e) => onChange(e)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            className="form-control"
             type="password"
-            placeholder="Enter Password"
+            placeholder="Password"
+            name="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+            onChange={(e) => onChange(e)}
+            minLength="6"
+            required
+          />
+        </div>
+        <button className="btn btn-primary" type="submit">
+          Login
+        </button>
+      </form>
 
-        <Button type="submit" variant="primary">
-          Sign In
-        </Button>
-      </Form>
-
-      <Row className="py-3">
-        <Col>
-          New Customer?{" "}
-          {/* <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
-            Register
-          </Link> */}
-        </Col>
-      </Row>
-    </FormContainer>
+      <p className="mt-3">
+        Don't have an account? <Link to="/signup">Sign Up</Link>
+      </p>
+      <p className="mt-3">
+        Forgot your Password? <Link to="/reset-password">Reset Password</Link>
+      </p>
+    </div>
   );
-}
+};
 
-export default LoginScreen;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { login })(LoginScreen);

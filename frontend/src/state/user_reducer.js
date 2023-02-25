@@ -14,10 +14,6 @@ import {
   SIGNUP_FAIL,
   ACTIVATION_SUCCESS,
   ACTIVATION_FAIL,
-  GOOGLE_AUTH_SUCCESS,
-  GOOGLE_AUTH_FAIL,
-  FACEBOOK_AUTH_SUCCESS,
-  FACEBOOK_AUTH_FAIL,
   LOGOUT,
 } from "../constants/auth_types";
 
@@ -28,7 +24,7 @@ const initialState = {
   user: null,
 };
 
-export const authReducer = (state = initialState, action) => {
+export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
@@ -38,8 +34,6 @@ export const authReducer = (state = initialState, action) => {
         isAuthenticated: true,
       };
     case LOGIN_SUCCESS:
-    case GOOGLE_AUTH_SUCCESS:
-    case FACEBOOK_AUTH_SUCCESS:
       localStorage.setItem("access", payload.access);
       localStorage.setItem("refresh", payload.refresh);
       return {
@@ -68,8 +62,7 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         user: null,
       };
-    case GOOGLE_AUTH_FAIL:
-    case FACEBOOK_AUTH_FAIL:
+
     case LOGIN_FAIL:
     case SIGNUP_FAIL:
     case LOGOUT:
@@ -94,4 +87,4 @@ export const authReducer = (state = initialState, action) => {
     default:
       return state;
   }
-};
+}
