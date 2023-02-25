@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, redirect } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { login } from "../../actions/auth";
 
@@ -21,7 +21,7 @@ const LoginScreen = ({ login, isAuthenticated }) => {
   };
 
   if (isAuthenticated) {
-    return redirect("/");
+    return <Navigate to="/" replace />;
   }
 
   return (
