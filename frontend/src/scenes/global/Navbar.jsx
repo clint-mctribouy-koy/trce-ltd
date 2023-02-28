@@ -6,15 +6,24 @@ import {
   MenuOutlined,
   SearchOutlined,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { setIsCartOpen } from "../../state";
 import { bindTrigger, bindMenu } from "material-ui-popup-state/hooks";
 import PopupState from "material-ui-popup-state";
+import { connect } from "react-redux";
+import { logout } from "../../actions/auth";
+import React, { useState } from "react";
 
-function NavigationBar() {
+function NavigationBar(logout, isAuthenticated) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
+  const [redirect, setRedirect] = useState(false);
+
+  const logout_user = () => {
+    logout();
+    setRedirect(true);
+  };
 
   return (
     <Box
@@ -65,9 +74,17 @@ function NavigationBar() {
                 </IconButton>
 
                 <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={popupState.close}>Profile</MenuItem>
-                  <MenuItem onClick={popupState.close}>My Account</MenuItem>
-                  <MenuItem onClick={popupState.close}>Logout</MenuItem>
+                  {isAuthenticated ? (
+                    <div>
+                      <MenuItem onClick={popupState.close}>Profile</MenuItem>
+                      <MenuItem onClick={popupState.close}>My Account</MenuItem>
+                      <MenuItem onClick={() => logout_user}>Logout</MenuItem>
+                    </div>
+                  ) : (
+                    <div>
+                      <MenuItem onClick={popupState.close}>Log In</MenuItem>
+                    </div>
+                  )}
                 </Menu>
               </>
             )}
@@ -110,6 +127,7 @@ function NavigationBar() {
                   <MenuItem onClick={popupState.close}>NAGARE</MenuItem>
                   <MenuItem onClick={popupState.close}>BAND.03</MenuItem>
                 </Menu>
+                {redirect ? <Navigate to="/" /> : <></>}
               </>
             )}
           </PopupState>
@@ -118,5 +136,8 @@ function NavigationBar() {
     </Box>
   );
 }
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
 
-export default NavigationBar;
+export default connect(mapStateToProps, { logout })(NavigationBar);
