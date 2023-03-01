@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { reset_password } from "../../actions/auth";
 const ResetPassword = ({ reset_password }) => {
@@ -21,7 +21,7 @@ const ResetPassword = ({ reset_password }) => {
   };
 
   if (requestSent) {
-    return <Redirect to="/" />;
+    return <Navigate to="/" replace />;
   }
 
   return (

@@ -42,13 +42,13 @@ function App() {
               path="/activate/:uid/:token"
               element={<ActivateScreen />}
             />
+            <Route
+              exact
+              path="/password/reset/confirm/:uid/:token"
+              element={<ConfirmPasswordReset />}
+            />
+            <Route exact path="/reset-password" element={<ResetPasword />} />
           </Routes>
-          <Route
-            exact
-            path="/password/reset/confirm/:uid/:token"
-            element={<ConfirmPasswordReset />}
-          />
-          <Route exact path="/reset-password" element={<ResetPasword />} />
 
           <CartMenu />
           <Footer />
