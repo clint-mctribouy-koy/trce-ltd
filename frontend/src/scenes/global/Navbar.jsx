@@ -6,15 +6,15 @@ import {
   MenuOutlined,
   SearchOutlined,
 } from "@mui/icons-material";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, Link } from "react-router-dom";
 import { setIsCartOpen } from "../../state";
 import { bindTrigger, bindMenu } from "material-ui-popup-state/hooks";
 import PopupState from "material-ui-popup-state";
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-function NavigationBar(logout, isAuthenticated) {
+function NavigationBar({ logout, isAuthenticated }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
@@ -22,7 +22,7 @@ function NavigationBar(logout, isAuthenticated) {
 
   const logout_user = () => {
     logout();
-    setRedirect(true);
+    // setRedirect(true); - fix this redirect condition
   };
 
   return (
@@ -62,8 +62,24 @@ function NavigationBar(logout, isAuthenticated) {
             <SearchOutlined />
           </IconButton>
 
-          <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
+          {isAuthenticated ? (
+            <Box sx={{ "&:hover": { cursor: "pointer" } }} color="black">
+              <a className="nav-link" href="#!" onClick={() => logout_user()}>
+                Logout
+              </a>
+            </Box>
+          ) : (
+            <Box
+              onClick={() => navigate("/login")}
+              sx={{ "&:hover": { cursor: "pointer" } }}
+              color="black"
+            >
+              Log In
+            </Box>
+          )}
+
+          {/* <PopupState variant="popover" popupId="demo-popup-menu"> */}
+          {/* {(popupState, isAuthenticated) => (
               <>
                 <IconButton
                   variant="contained"
@@ -71,24 +87,29 @@ function NavigationBar(logout, isAuthenticated) {
                   {...bindTrigger(popupState)}
                 >
                   <PersonOutline />
-                </IconButton>
+                </IconButton> */}
 
-                <Menu {...bindMenu(popupState)}>
+          {/* <Menu {...bindMenu(popupState)}>
                   {isAuthenticated ? (
                     <div>
+                      <MenuItem onClick={popupState.close}>Log In</MenuItem>
                       <MenuItem onClick={popupState.close}>Profile</MenuItem>
                       <MenuItem onClick={popupState.close}>My Account</MenuItem>
-                      <MenuItem onClick={() => logout_user}>Logout</MenuItem>
+                      <MenuItem onClick={() => dispatch(logout_user())}>
+                        Logout
+                      </MenuItem>
                     </div>
                   ) : (
                     <div>
-                      <MenuItem onClick={popupState.close}>Log In</MenuItem>
+                      <MenuItem onClick={() => navigate("/login")}>
+                        Log in
+                      </MenuItem>
                     </div>
                   )}
-                </Menu>
-              </>
-            )}
-          </PopupState>
+                </Menu> */}
+          {/* </>
+            )} */}
+          {/* </PopupState> */}
           <Badge
             badgeContent={cart.length}
             color="secondary"
@@ -127,7 +148,7 @@ function NavigationBar(logout, isAuthenticated) {
                   <MenuItem onClick={popupState.close}>NAGARE</MenuItem>
                   <MenuItem onClick={popupState.close}>BAND.03</MenuItem>
                 </Menu>
-                {redirect ? <Navigate to="/" /> : <></>}
+                {redirect ? <Navigate to="/" replace /> : <></>}
               </>
             )}
           </PopupState>
