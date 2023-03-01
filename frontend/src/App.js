@@ -13,6 +13,7 @@ import Layout from "./components/Layout";
 import RegisterScreen from "./scenes/home/RegisterScreen";
 import ActivateScreen from "./scenes/home/ActivateScreen";
 import ResetPasword from "./scenes/home/ResetPasword";
+import ProductListScreen from "./scenes/global/ProductListScreen";
 import ConfirmPasswordReset from "./scenes/home/ConfirmPasswordReset";
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -48,6 +49,7 @@ function App() {
               element={<ConfirmPasswordReset />}
             />
             <Route exact path="/reset-password" element={<ResetPasword />} />
+            <Route exact path="/productlist" element={<ProductListScreen />} />
           </Routes>
 
           <CartMenu />

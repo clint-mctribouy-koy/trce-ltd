@@ -30,7 +30,7 @@ function NavigationBar({ logout, isAuthenticated }) {
       display="flex"
       alignItems="center"
       width="100%"
-      height="60px"
+      height="50px"
       backgroundColor="rgba(255, 255, 255, 0.95)"
       color="black"
       position="fixed"
