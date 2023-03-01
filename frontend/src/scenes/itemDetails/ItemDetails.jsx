@@ -9,7 +9,7 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../../theme";
-import { addToCart } from "../../state";
+import { addToCart } from "../../state/cart_reducer";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 

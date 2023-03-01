@@ -7,7 +7,7 @@ import {
   SearchOutlined,
 } from "@mui/icons-material";
 import { Navigate, useNavigate, Link } from "react-router-dom";
-import { setIsCartOpen } from "../../state";
+import { setIsCartOpen } from "../../state/cart_reducer";
 import { bindTrigger, bindMenu } from "material-ui-popup-state/hooks";
 import PopupState from "material-ui-popup-state";
 import { connect } from "react-redux";

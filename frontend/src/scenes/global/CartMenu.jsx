@@ -10,7 +10,7 @@ import {
   increaseCount,
   removeFromCart,
   setIsCartOpen,
-} from "../../state";
+} from "../../state/cart_reducer";
 import { useNavigate } from "react-router-dom";
 
 const FlexBox = styled(Box)`

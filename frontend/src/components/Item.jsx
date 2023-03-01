@@ -4,7 +4,7 @@ import { IconButton, Box, Typography, useTheme, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { shades } from "../theme";
-import { addToCart } from "../state";
+import { addToCart } from "../state/cart_reducer";
 import { useNavigate } from "react-router-dom";
 
 const Item = ({ item, width }) => {
@@ -77,7 +77,7 @@ const Item = ({ item, width }) => {
             .replace(/^./, (str) => str.toUpperCase())}
         </Typography> */}
         <Typography>{name}</Typography>
-        <Typography fontWeight="bold">${price}</Typography>
+        <Typography fontWeight="bold">{price}</Typography>
       </Box>
     </Box>
   );
