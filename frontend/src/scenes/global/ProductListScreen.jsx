@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import API from "../../API";
 
-const AddProduct = ({ onAdd }) => {
+const AddProduct = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [brand, setBrand] = useState("");
@@ -28,7 +28,7 @@ const AddProduct = ({ onAdd }) => {
   };
 
   const onUpdate = (id) => {
-    let item = { name };
+    let item = { name, price, brand };
     API.patch(`/${id}/`, item).then((res) => listProducts());
   };
 
@@ -39,8 +39,8 @@ const AddProduct = ({ onAdd }) => {
   function selectItem(id) {
     let item = products.filter((product) => product._id === id)[0];
     setName(item.name);
-    setPrice(item.brand);
-    setBrand(item.price);
+    setPrice(item.price);
+    setBrand(item.brand);
     setItemId(item.id);
   }
 
@@ -81,19 +81,14 @@ const AddProduct = ({ onAdd }) => {
             </Form.Group>
 
             <div className="float-right">
-              <Button
-                variant="primary"
-                type="submit"
-                onClick={onSubmit}
-                className="mx-2"
-              >
+              <Button variant="primary" type="submit" onClick={onSubmit}>
                 Save
               </Button>
             </div>
           </Form>
         </div>
         <div className="col-md-8 m">
-          <table class="table">
+          <table className="table">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -106,7 +101,7 @@ const AddProduct = ({ onAdd }) => {
             <tbody>
               {products.map((product, index) => {
                 return (
-                  <tr key="">
+                  <tr key={index}>
                     <th scope="row">{product._id}</th>
                     <td> {product.name}</td>
                     <td>{product.price}</td>
@@ -119,7 +114,15 @@ const AddProduct = ({ onAdd }) => {
                         className="mx-2"
                         size="sm"
                       >
-                        UPDATE
+                        EDIT
+                      </Button>
+                      <Button
+                        variant="primary"
+                        onClick={() => onUpdate(product._id)}
+                        className="mx-2"
+                        size="sm"
+                      >
+                        SAVE EDIT
                       </Button>
 
                       <Button
