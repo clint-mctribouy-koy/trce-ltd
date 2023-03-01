@@ -30,7 +30,7 @@ const Item = ({ item, width }) => {
           width="300px"
           height="400px"
           src={item.image}
-          onClick={() => navigate(`/item/${item.uuid}`)}
+          onClick={() => navigate(`/item/${item._id}`)}
           style={{ cursor: "pointer" }}
         />
 
