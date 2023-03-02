@@ -69,6 +69,22 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+class Brand(models.Model):
+    user = models.ForeignKey(UserAccount, on_delete=models.SET_NULL, null=True)
+    address = models.TextField(null=True)
+    brand_name = models.CharField(max_length=255)
+    
+    def __str__(self):
+        return self.brand_name
+    
+class Customer(models.Model):
+    user = models.ForeignKey(UserAccount, on_delete=models.SET_NULL, null=True)
+    address = models.TextField(null=True)
+    mobile_number = models.PositiveBigIntegerField()
+    
+    def __str__(self):
+        return self.user.email
+
 class Product(models.Model):
     user = models.ForeignKey(UserAccount, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=200, null=True, blank=True)
@@ -87,10 +103,8 @@ class Product(models.Model):
         return self.name
 
 class Order(models.Model):
-    user = models.ForeignKey(UserAccount, on_delete=models.SET_NULL, null=True)
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
     paymentMethod = models.CharField(max_length=200, null=True, blank=True)
-    taxPrice = models.DecimalField(
-        max_digits=7, decimal_places=2, null=True, blank=True)
     shippingPrice = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True)
     totalPrice = models.DecimalField(
@@ -104,6 +118,6 @@ class Order(models.Model):
     _id = models.BigAutoField(primary_key=True, editable=False)
 
     def __str__(self):
-        return str(self.createdAt)
+        return str(self.customer)
 
 

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from djoser.serializers import UserCreateSerializer
-from .models import Product, Order, UserAccount
+from .models import Product, Order, UserAccount, Brand
 from djoser.serializers import UserCreateSerializer
 
 
@@ -19,3 +19,7 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = '__all__'
 
+class BrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Brand
+        fields = '__all__'
