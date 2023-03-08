@@ -16,6 +16,8 @@ import ResetPasword from "./scenes/home/ResetPasword";
 import ProductListScreen from "./scenes/global/ProductListScreen";
 import ConfirmPasswordReset from "./scenes/home/ConfirmPasswordReset";
 import SignUpConfirmation from "./scenes/home/SignUpConfirmation";
+import Dashboard from "./scenes/customer/CustomerDashboard";
+import CustomerOrders from "./scenes/customer/CustomerOrders";
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -56,6 +58,8 @@ function App() {
               path="/signup/confirmation"
               element={<SignUpConfirmation />}
             />
+            <Route exact path="/customer/dashboard" element={<Dashboard />} />
+            <Route exact path="/customer/orders" element={<CustomerOrders />} />
           </Routes>
 
           <CartMenu />
