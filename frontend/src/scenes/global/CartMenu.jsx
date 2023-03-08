@@ -76,7 +76,7 @@ const CartMenu = () => {
                       <Typography fontWeight="bold">{item.name}</Typography>
                       <IconButton
                         onClick={() =>
-                          dispatch(removeFromCart({ id: item.id }))
+                          dispatch(removeFromCart({ name: item.name }))
                         }
                       >
                         <CloseIcon />
