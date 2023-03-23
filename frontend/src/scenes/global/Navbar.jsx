@@ -111,7 +111,7 @@ function NavigationBar({ logout, isAuthenticated }) {
             )} */}
           {/* </PopupState> */}
           <Badge
-            badgeContent={cart.length}
+            badgeContent=""
             color="secondary"
             invisible={cart.length === 0}
             sx={{

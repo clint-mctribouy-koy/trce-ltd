@@ -60,7 +60,6 @@ const Item = ({ item, width }) => {
             <Button
               onClick={() => {
                 dispatch(addToCart({ item: { ...item, count } }));
-                console.log("LOOK HERE", item);
               }}
               sx={{ backgroundColor: shades.primary[300], color: "white" }}
             >
