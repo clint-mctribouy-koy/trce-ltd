@@ -1,2 +1,2 @@
 # trce-ltd-
-TRCE e-commerce platform
+TRCE e-commerce platform - in development 
