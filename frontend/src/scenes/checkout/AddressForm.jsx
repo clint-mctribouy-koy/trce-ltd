@@ -2,7 +2,8 @@ import { getIn } from "formik";
 import { Box } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
 const AddressForm = ({
   type,
   values,
@@ -12,6 +13,59 @@ const AddressForm = ({
   handleChange,
 }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
+
+  const checkout =
+    (first_name, last_name, country, street_address, city, post_code) =>
+    async (dispatch) => {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const body = JSON.stringify({
+        first_name,
+        last_name,
+        country,
+        street_address,
+        city,
+        post_code,
+      });
+
+      try {
+        await axios.post("http://127.0.0.1:8000/api/orders/", body, config);
+
+        console.log("SUCCESS NIGGA");
+      } catch (err) {
+        console.log("This is an error", err);
+      }
+    };
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    country: "",
+    street_address: "",
+    city: "",
+    post_code: "",
+  });
+
+  const { first_name, last_name, country, street_address, city, post_code } =
+    formData;
+
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    checkout(first_name, last_name, country, street_address, city, post_code);
+  };
+
+  // const [firstName, setFirstName] = useState("");
+  // const [lastName, setLastName] = useState("");
+  // const [country, setCountry] = useState("");
+  // const [streetAddress, setSetAddress] = useState("");
+  // const [city, setCity] = useState("");
+  // const [postcode, setPostcode] = useState("");
 
   // these functions allow for better code readability
   const formattedName = (field) => `${type}.${field}`;
@@ -106,22 +160,11 @@ const AddressForm = ({
         helperText={formattedHelper("city")}
         sx={{ gridColumn: "span 2" }}
       />
+
       <TextField
         fullWidth
         type="text"
-        label="State"
-        onBlur={handleBlur}
-        onChange={handleChange}
-        value={values.state}
-        name={formattedName("state")}
-        error={formattedError("state")}
-        helperText={formattedHelper("state")}
-        sx={{ gridColumn: "1fr" }}
-      />
-      <TextField
-        fullWidth
-        type="text"
-        label="Zip Code"
+        label="Post Code"
         onBlur={handleBlur}
         onChange={handleChange}
         value={values.zipCode}

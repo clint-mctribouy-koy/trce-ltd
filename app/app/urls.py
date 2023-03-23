@@ -30,12 +30,15 @@ router.register(r'orders', views.OrderView, 'order')
 
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)), 
     path('api/users/', include('core.urls.user_urls')),
     path('api/brands/', views.BrandView.as_view(), name='brands' ),
     path('api/customers/', views.CustomerView.as_view(), name='customers' ),
+    path('api/address/', views.ShippingAddressView.as_view(),  name='address' ),
+
 
 
   

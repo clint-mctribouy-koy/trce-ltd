@@ -157,25 +157,21 @@ const Checkout = () => {
 
 const initialValues = {
   billingAddress: {
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     country: "",
-    street1: "",
-    street2: "",
+    street_address: "",
     city: "",
-    state: "",
-    zipCode: "",
+    postal_code: "",
   },
   shippingAddress: {
     isSameAddress: true,
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     country: "",
-    street1: "",
-    street2: "",
+    street_address: "",
     city: "",
-    state: "",
-    zipCode: "",
+    postal_code: "",
   },
   email: "",
   phoneNumber: "",
@@ -184,22 +180,20 @@ const initialValues = {
 const checkoutSchema = [
   yup.object().shape({
     billingAddress: yup.object().shape({
-      firstName: yup.string().required("required"),
-      lastName: yup.string().required("required"),
+      first_name: yup.string().required("required"),
+      last_name: yup.string().required("required"),
       country: yup.string().required("required"),
-      street1: yup.string().required("required"),
-      street2: yup.string(),
+      street_address: yup.string().required("required"),
       city: yup.string().required("required"),
-      state: yup.string().required("required"),
-      zipCode: yup.string().required("required"),
+      postal_code: yup.string().required("required"),
     }),
     shippingAddress: yup.object().shape({
       isSameAddress: yup.boolean(),
-      firstName: yup.string().when("isSameAddress", {
+      first_name: yup.string().when("isSameAddress", {
         is: false,
         then: yup.string().required("required"),
       }),
-      lastName: yup.string().when("isSameAddress", {
+      last_name: yup.string().when("isSameAddress", {
         is: false,
         then: yup.string().required("required"),
       }),
@@ -207,20 +201,11 @@ const checkoutSchema = [
         is: false,
         then: yup.string().required("required"),
       }),
-      street1: yup.string().when("isSameAddress", {
+      street_address: yup.string().when("isSameAddress", {
         is: false,
         then: yup.string().required("required"),
       }),
-      street2: yup.string(),
-      city: yup.string().when("isSameAddress", {
-        is: false,
-        then: yup.string().required("required"),
-      }),
-      state: yup.string().when("isSameAddress", {
-        is: false,
-        then: yup.string().required("required"),
-      }),
-      zipCode: yup.string().when("isSameAddress", {
+      postal_code: yup.string().when("isSameAddress", {
         is: false,
         then: yup.string().required("required"),
       }),

@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
-from .serializers import ProductSerializer, OrderSerializer, BrandSerializer
+from .serializers import ProductSerializer, OrderSerializer, BrandSerializer, ShippingAddressSerializer
 from rest_framework import viewsets, generics      
-from .models import Product, Order, Brand     
+from .models import Product, Order, Brand, ShippingAddress    
 from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
 
 
@@ -26,6 +26,12 @@ class BrandView(generics.ListAPIView):
     permission_classes = ()
     serializer_class = BrandSerializer
     queryset = Brand.objects.all() 
+
+class ShippingAddressView(generics.ListAPIView): 
+    # add permissions to access this only for TRCE ADMINS
+    permission_classes = ()
+    serializer_class = ShippingAddressSerializer
+    queryset = ShippingAddress.objects.all() 
 
 class CustomerView(generics.ListAPIView): 
     # add permissions to access this only for TRCE ADMINS

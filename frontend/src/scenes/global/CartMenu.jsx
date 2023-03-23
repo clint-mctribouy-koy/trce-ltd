@@ -12,7 +12,7 @@ import {
   setIsCartOpen,
 } from "../../state/cart_reducer";
 import { useNavigate } from "react-router-dom";
-
+import { useState } from "react";
 const FlexBox = styled(Box)`
   display: flex;
   justify-content: space-between;
@@ -22,6 +22,8 @@ const FlexBox = styled(Box)`
 const CartMenu = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  // const storedCartItems = localStorage.getItem("cart");
+  // const [cart, setCart] = useState();
   const cart = useSelector((state) => state.cart.cart);
   const isCartOpen = useSelector((state) => state.cart.isCartOpen);
 

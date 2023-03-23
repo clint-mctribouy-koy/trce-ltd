@@ -101,13 +101,23 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-
+    
+class ShippingAddress(models.Model):
+    first_name = models.CharField(max_length=200, null=True, blank=True)
+    last_name = models.CharField(max_length=200, null=True, blank=True)
+    street_address = models.CharField(max_length=200, null=True, blank=True)
+    country = models.CharField(max_length=200, null=True, blank=True)
+    city = models.CharField(max_length=200, null=True, blank=True)
+    postal_code = models.CharField(max_length=200, null=True, blank=True)
+    
+    def __str__(self):
+        return str(self.street_address)
+    
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
-    paymentMethod = models.CharField(max_length=200, null=True, blank=True)
-    shippingPrice = models.DecimalField(
-        max_digits=7, decimal_places=2, null=True, blank=True)
-    totalPrice = models.DecimalField(
+    shipping_address = models.ForeignKey(ShippingAddress, on_delete=models.SET_NULL, null=True)
+    payment_method = models.CharField(max_length=200, null=True, blank=True)
+    total_price = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True)
     isPaid = models.BooleanField(default=False)
     paidAt = models.DateTimeField(auto_now_add=False, null=True, blank=True)
