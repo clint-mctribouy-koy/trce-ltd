@@ -21,6 +21,7 @@ import { useDispatch } from "react-redux";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import ApiService from "../../payment_api";
 import { useNavigate } from "react-router-dom";
+import { resetCart } from "../../state/cart_reducer";
 
 const FlexBox = styled(Box)`
   display: flex;
@@ -36,6 +37,7 @@ const Checkout = (props) => {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const totalPrice = cart.reduce((total, item) => {
     return total + item.count * item.price;
@@ -54,6 +56,7 @@ const Checkout = (props) => {
 
     if (isSecondStep) {
       makePayment(values);
+      dispatch(resetCart());
     }
 
     actions.setTouched({});
