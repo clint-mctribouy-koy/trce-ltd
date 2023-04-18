@@ -114,16 +114,10 @@ class ShippingAddress(models.Model):
         return str(self.street_address)
     
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
-    shipping_address = models.ForeignKey(ShippingAddress, on_delete=models.SET_NULL, null=True)
+    customer = models.EmailField(max_length=255, null=True)
+    shipping_address =  models.TextField(null=True)
     payment_method = models.CharField(max_length=200, null=True, blank=True)
-    total_price = models.DecimalField(
-        max_digits=7, decimal_places=2, null=True, blank=True)
-    isPaid = models.BooleanField(default=False)
-    paidAt = models.DateTimeField(auto_now_add=False, null=True, blank=True)
-    isDelivered = models.BooleanField(default=False)
-    deliveredAt = models.DateTimeField(
-        auto_now_add=False, null=True, blank=True)
+    total_price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     createdAt = models.DateTimeField(default=timezone.now)
     _id = models.BigAutoField(primary_key=True, editable=False)
 

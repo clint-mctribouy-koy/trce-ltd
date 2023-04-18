@@ -1,5 +1,13 @@
 import { useSelector } from "react-redux";
-import { Box, Button, Stepper, Step, StepLabel } from "@mui/material";
+import {
+  Box,
+  Button,
+  Stepper,
+  Step,
+  StepLabel,
+  Typography,
+  IconButton,
+} from "@mui/material";
 import { Formik } from "formik";
 import { useState, useEffect } from "react";
 import * as yup from "yup";
@@ -8,16 +16,27 @@ import Payment from "./Payment";
 import Shipping from "./Shipping";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
+import styled from "@emotion/styled";
+import { useDispatch } from "react-redux";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import ApiService from "../../payment_api";
+const FlexBox = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
-const stripePromise = loadStripe(
-  "pk_test_51MHt3GADbUssSGYMdWu8rMnUoqe2MhtMtV6ip00bzqlQBwAs5ogREQjK59zKDHLn7gUOLrehGwPTUpbEsTVbqmSu007Fq3B0xS"
-);
-
-const Checkout = () => {
+const Checkout = (props) => {
   const [activeStep, setActiveStep] = useState(0);
   const cart = useSelector((state) => state.cart.cart);
   const isFirstStep = activeStep === 0;
   const isSecondStep = activeStep === 1;
+  const stripe = useStripe();
+  const elements = useElements();
+
+  const totalPrice = cart.reduce((total, item) => {
+    return total + item.count * item.price;
+  }, 0);
 
   const handleFormSubmit = async (values, actions) => {
     setActiveStep(activeStep + 1);
@@ -38,14 +57,24 @@ const Checkout = () => {
   };
 
   async function makePayment(values) {
-    const stripe = await stripePromise;
+    const card = elements.getElement(CardElement);
+
+    const { paymentMethod, error } = await stripe.createPaymentMethod({
+      type: "card",
+      card: card,
+    });
     const requestBody = {
-      userName: [values.firstName, values.lastName].join(" "),
-      email: values.email,
-      products: cart.map(({ id, count }) => ({
-        id,
-        count,
-      })),
+      customer: values.email,
+      shipping_address: [
+        values.billingAddress.firstName,
+        values.billingAddress.lastName,
+        values.billingAddress.street1,
+        values.billingAddress.city,
+        values.billingAddress.country,
+        values.billingAddress.zipCode,
+      ].join(", "),
+      payment_method: paymentMethod.type,
+      total_price: totalPrice,
     };
 
     const response = await fetch("http://localhost:8000/api/orders/", {
@@ -53,18 +82,17 @@ const Checkout = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),
     });
-    const session = await response.json();
-    await stripe.redirectToCheckout({
-      lineItems: [
-        {
-          price: "price_1MRn1WADbUssSGYMK9eHBX7J",
-          quantity: 1,
-        },
-      ],
-      mode: "payment",
-      successUrl: `${window.location.origin}/checkout/success`,
-      cancelUrl: `${window.location.origin}/checkout`,
-    });
+
+    ApiService.saveStripeInfo({
+      email: values.email,
+      payment_method_id: paymentMethod.id,
+    })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   return (
@@ -77,6 +105,34 @@ const Checkout = () => {
           <StepLabel>Payment</StepLabel>
         </Step>
       </Stepper>
+
+      <Box>
+        {cart.map((item) => (
+          <Box key={`${item.name}-${item.id}`}>
+            <FlexBox p="15px 0">
+              <Box flex="1 1 40%">
+                <img
+                  alt={item?.name}
+                  width="123px"
+                  height="164px"
+                  src={`${item?.image}`}
+                />
+              </Box>
+              <Box flex="1 1 60%">
+                <FlexBox mb="5px">
+                  <Typography fontWeight="bold">{item.name}</Typography>
+                </FlexBox>
+                <FlexBox m="15px 0">
+                  <Typography>QTY: {item.count}</Typography>
+                  <Typography fontWeight="bold">${item.price}</Typography>
+                </FlexBox>
+              </Box>
+            </FlexBox>
+          </Box>
+        ))}
+        <Typography fontWeight="bold">Total Price: ${totalPrice}</Typography>
+      </Box>
+
       <Box>
         <Formik
           onSubmit={handleFormSubmit}
@@ -113,6 +169,7 @@ const Checkout = () => {
                   setFieldValue={setFieldValue}
                 />
               )}
+              <CardElement id="card-element" onChange={handleChange} />
               <Box display="flex" justifyContent="space-between" gap="50px">
                 {!isFirstStep && (
                   <Button
@@ -131,6 +188,7 @@ const Checkout = () => {
                     Back
                   </Button>
                 )}
+
                 <Button
                   fullWidth
                   type="submit"
@@ -180,12 +238,12 @@ const initialValues = {
 const checkoutSchema = [
   yup.object().shape({
     billingAddress: yup.object().shape({
-      first_name: yup.string().required("required"),
-      last_name: yup.string().required("required"),
-      country: yup.string().required("required"),
-      street_address: yup.string().required("required"),
-      city: yup.string().required("required"),
-      postal_code: yup.string().required("required"),
+      first_name: yup.string(),
+      last_name: yup.string(),
+      country: yup.string(),
+      street_address: yup.string(),
+      city: yup.string(),
+      postal_code: yup.string(),
     }),
     shippingAddress: yup.object().shape({
       isSameAddress: yup.boolean(),
