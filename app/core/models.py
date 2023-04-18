@@ -118,6 +118,7 @@ class Order(models.Model):
     shipping_address =  models.TextField(null=True)
     payment_method = models.CharField(max_length=200, null=True, blank=True)
     total_price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    is_ordered = models.BooleanField(default=False)
     createdAt = models.DateTimeField(default=timezone.now)
     _id = models.BigAutoField(primary_key=True, editable=False)
 

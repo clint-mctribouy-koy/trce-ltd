@@ -49,6 +49,7 @@ class CustomerView(generics.ListAPIView):
 
 @api_view(['POST'])
 def save_stripe_info(request):
+
   data = request.data
   email = data['email']
   payment_method_id = data['payment_method_id']
@@ -65,13 +66,26 @@ def save_stripe_info(request):
     customer = customer_data[0]
     extra_msg = "Customer already exists."
   
-  stripe.PaymentIntent.create(
-    customer=customer, 
-    payment_method=payment_method_id,  
-    currency='gbp', 
-    amount=1200,
-    confirm=True
-) 
+  order = Order.objects.get(customer=email, is_ordered=False)
+
+  try: 
+    stripe.PaymentIntent.create(
+      customer=customer, 
+      payment_method=payment_method_id,  
+      currency='gbp', 
+      amount=int(order.total_price * 100),
+      confirm=True
+  ) 
+    order.is_ordered = True
+    order.save()
+
+  except:
+     print('SOME ERROR WITH FINDING THIS ')
+    
+
+
+
+
 
   
   return Response(status=status.HTTP_200_OK, 
