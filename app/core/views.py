@@ -81,13 +81,7 @@ def save_stripe_info(request):
 
   except:
      print('SOME ERROR WITH FINDING THIS ')
-    
 
-
-
-
-
-  
   return Response(status=status.HTTP_200_OK, 
     data={'message': 'Success', 'data': {
       'customer_id': customer.id, 'extra_msg': extra_msg, }

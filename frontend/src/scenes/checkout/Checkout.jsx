@@ -20,6 +20,8 @@ import styled from "@emotion/styled";
 import { useDispatch } from "react-redux";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import ApiService from "../../payment_api";
+import { useNavigate } from "react-router-dom";
+
 const FlexBox = styled(Box)`
   display: flex;
   justify-content: space-between;
@@ -33,6 +35,7 @@ const Checkout = (props) => {
   const isSecondStep = activeStep === 1;
   const stripe = useStripe();
   const elements = useElements();
+  const navigate = useNavigate();
 
   const totalPrice = cart.reduce((total, item) => {
     return total + item.count * item.price;
@@ -93,6 +96,8 @@ const Checkout = (props) => {
       .catch((error) => {
         console.log(error);
       });
+
+    await navigate(`/checkout/success`);
   }
 
   return (
