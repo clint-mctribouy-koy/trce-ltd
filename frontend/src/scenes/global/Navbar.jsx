@@ -80,7 +80,7 @@ function NavigationBar({ logout, isAuthenticated, isAdmin }) {
                     </MenuItem>
 
                     {isAdmin ? (
-                      <MenuItem onClick={() => navigate("/admin/productlist")}>
+                      <MenuItem onClick={() => navigate("/admin/dashboard")}>
                         Admin Dashboard
                       </MenuItem>
                     ) : null}

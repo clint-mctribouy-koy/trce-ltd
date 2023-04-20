@@ -22,6 +22,7 @@ import { saveState } from "./localstorage";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js/pure";
 import CheckoutSignin from "./scenes/checkout/CheckoutSignin";
+import AdminDashboard from "./scenes/admin/AdminDashboard";
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -74,6 +75,11 @@ function App() {
                 exact
                 path="/admin/productlist"
                 element={<ProductListScreen />}
+              />
+              <Route
+                exact
+                path="/admin/dashboard"
+                element={<AdminDashboard />}
               />
               <Route
                 exact

@@ -4,7 +4,7 @@ import API from "../../API";
 import { connect } from "react-redux";
 import { load_user } from "../../actions/auth";
 import { Navigate } from "react-router-dom";
-
+import AdminSideBar from "../admin/AdminSideBar";
 const AddProduct = ({ isAuthenticated, isAdmin }) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
@@ -54,6 +54,9 @@ const AddProduct = ({ isAuthenticated, isAdmin }) => {
   return (
     <div className="container mt-5">
       <div className="row">
+        <div className="col-md-3 col-12">
+          <AdminSideBar />
+        </div>
         <div className="col-md-4">
           <h3 className="float-left">Create a new Product</h3>
           <Form onSubmit={onSubmit} className="mt-4">
