@@ -63,53 +63,51 @@ function NavigationBar({ logout, isAuthenticated }) {
           </IconButton>
 
           {isAuthenticated ? (
-            <Box sx={{ "&:hover": { cursor: "pointer" } }} color="black">
-              <a className="nav-link" href="#!" onClick={() => logout_user()}>
-                Logout
-              </a>
-            </Box>
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <>
+                  <IconButton
+                    variant="contained"
+                    sx={{ color: "black" }}
+                    {...bindTrigger(popupState)}
+                  >
+                    <PersonOutline />
+                  </IconButton>
+
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={() => navigate("/customer/dashboard")}>
+                      Dashboard
+                    </MenuItem>
+                    <MenuItem onClick={() => logout_user()}>Logout</MenuItem>
+                  </Menu>
+                </>
+              )}
+            </PopupState>
           ) : (
-            <Box
-              onClick={() => navigate("/login")}
-              sx={{ "&:hover": { cursor: "pointer" } }}
-              color="black"
-            >
-              Log In
-            </Box>
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <>
+                  <IconButton
+                    variant="contained"
+                    sx={{ color: "black" }}
+                    {...bindTrigger(popupState)}
+                  >
+                    <PersonOutline />
+                  </IconButton>
+
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={() => navigate("/login")}>
+                      Log in
+                    </MenuItem>
+                    <MenuItem onClick={() => navigate("/signup")}>
+                      Create Account
+                    </MenuItem>
+                  </Menu>
+                </>
+              )}
+            </PopupState>
           )}
 
-          {/* <PopupState variant="popover" popupId="demo-popup-menu"> */}
-          {/* {(popupState, isAuthenticated) => (
-              <>
-                <IconButton
-                  variant="contained"
-                  sx={{ color: "black" }}
-                  {...bindTrigger(popupState)}
-                >
-                  <PersonOutline />
-                </IconButton> */}
-
-          {/* <Menu {...bindMenu(popupState)}>
-                  {isAuthenticated ? (
-                    <div>
-                      <MenuItem onClick={popupState.close}>Log In</MenuItem>
-                      <MenuItem onClick={popupState.close}>Profile</MenuItem>
-                      <MenuItem onClick={popupState.close}>My Account</MenuItem>
-                      <MenuItem onClick={() => dispatch(logout_user())}>
-                        Logout
-                      </MenuItem>
-                    </div>
-                  ) : (
-                    <div>
-                      <MenuItem onClick={() => navigate("/login")}>
-                        Log in
-                      </MenuItem>
-                    </div>
-                  )}
-                </Menu> */}
-          {/* </>
-            )} */}
-          {/* </PopupState> */}
           <Badge
             badgeContent=""
             color="secondary"
@@ -131,27 +129,6 @@ function NavigationBar({ logout, isAuthenticated }) {
               <ShoppingBagOutlined />
             </IconButton>
           </Badge>
-
-          <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <>
-                <IconButton
-                  variant="contained"
-                  sx={{ color: "black" }}
-                  {...bindTrigger(popupState)}
-                >
-                  <MenuOutlined />
-                </IconButton>
-
-                <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={popupState.close}>TRCE</MenuItem>
-                  <MenuItem onClick={popupState.close}>NAGARE</MenuItem>
-                  <MenuItem onClick={popupState.close}>BAND.03</MenuItem>
-                </Menu>
-                {redirect ? <Navigate to="/" replace /> : <></>}
-              </>
-            )}
-          </PopupState>
         </Box>
       </Box>
     </Box>
