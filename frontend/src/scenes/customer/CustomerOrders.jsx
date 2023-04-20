@@ -1,8 +1,11 @@
 import SideBar from "./SideBar";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Navigate } from "react-router-dom";
+import { connect } from "react-redux";
+import { load_user } from "../../actions/auth";
 
-function CustomerOrders() {
+function CustomerOrders({ isAuthenticated, load_user }) {
   const [items, setItem] = useState([]);
   const user_id = localStorage.getItem("user");
 
@@ -19,9 +22,14 @@ function CustomerOrders() {
 
   useEffect(() => {
     fetchData();
+    load_user();
   }, []);
 
   const customer0rders = items.filter((item) => item.user);
+
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
   return (
     <div className="container mt-5">
       <div className="row">
@@ -74,4 +82,8 @@ function CustomerOrders() {
   );
 }
 
-export default CustomerOrders;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { load_user })(CustomerOrders);
