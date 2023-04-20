@@ -16,6 +16,11 @@ import {
   ACTIVATION_FAIL,
   LOGOUT,
 } from "../constants/auth_types";
+import {
+  ORDER_LIST_MY_FAIL,
+  ORDER_LIST_MY_REQUEST,
+  ORDER_LIST_MY_SUCCESS,
+} from "../constants/orderConstants";
 
 export const load_user = () => async (dispatch) => {
   if (localStorage.getItem("access")) {
@@ -29,7 +34,7 @@ export const load_user = () => async (dispatch) => {
 
     try {
       const res = await axios.get(
-        "http://localhost:8000/api/users/auth/users/me/",
+        "http://localhost:8000/api/users/profile/",
         config
       );
 
@@ -40,50 +45,12 @@ export const load_user = () => async (dispatch) => {
     } catch (err) {
       dispatch({
         type: USER_LOADED_FAIL,
+        payload: err,
       });
     }
   } else {
     dispatch({
       type: USER_LOADED_FAIL,
-    });
-  }
-};
-
-export const checkAuthenticated = () => async (dispatch) => {
-  if (localStorage.getItem("access")) {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
-    const body = JSON.stringify({ token: localStorage.getItem("access") });
-
-    try {
-      const res = await axios.post(
-        "http://localhost:8000/api/users/auth/jwt/verify/",
-        body,
-        config
-      );
-
-      if (res.data.code !== "token_not_valid") {
-        dispatch({
-          type: AUTHENTICATED_SUCCESS,
-        });
-      } else {
-        dispatch({
-          type: AUTHENTICATED_FAIL,
-        });
-      }
-    } catch (err) {
-      dispatch({
-        type: AUTHENTICATED_FAIL,
-      });
-    }
-  } else {
-    dispatch({
-      type: AUTHENTICATED_FAIL,
     });
   }
 };
@@ -99,7 +66,7 @@ export const login = (email, password) => async (dispatch) => {
 
   try {
     const res = await axios.post(
-      "http://localhost:8000/api/users/auth/jwt/create/",
+      "http://localhost:8000/api/users/login/ ",
       body,
       config
     );
@@ -135,7 +102,7 @@ export const signup =
 
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/users/auth/users/",
+        "http://localhost:8000/api/users/register/",
         body,
         config
       );
@@ -150,6 +117,34 @@ export const signup =
       });
     }
   };
+
+export const listMyOrders = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: ORDER_LIST_MY_REQUEST,
+    });
+    dispatch(load_user());
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `JWT ${localStorage.getItem("access")}`,
+        Accept: "application/json",
+      },
+    };
+
+    const res = await axios.get(`/api/orders/`, config);
+
+    dispatch({
+      type: ORDER_LIST_MY_SUCCESS,
+      payload: res.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ORDER_LIST_MY_FAIL,
+    });
+  }
+};
 
 export const verify = (uid, token) => async (dispatch) => {
   const config = {

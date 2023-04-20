@@ -1,5 +1,39 @@
 import SideBar from "./SideBar";
-function Dashboard({ isAuthenticated }) {
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link, Navigate } from "react-router-dom";
+import { connect, useDispatch } from "react-redux";
+import { listMyOrders, load_user } from "../../actions/auth";
+
+function Dashboard({ load_user, isAuthenticated }) {
+  const [items, setItem] = useState([]);
+  const dispatch = useDispatch();
+
+  async function fetchData() {
+    try {
+      const user_id = localStorage.getItem("user");
+      const response = await axios.get(
+        `http://localhost:8000/api/${user_id}/orders/`
+      );
+      setItem(response.data);
+      console.log("HELLO", user_id);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+    load_user();
+  }, []);
+
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />;
+  } else {
+    // dispatch(listMyOrders());
+  }
+  const customer0rders = items.filter((item) => item.user);
+
   return (
     <div className="container mt-5">
       <div className="row">
@@ -13,27 +47,7 @@ function Dashboard({ isAuthenticated }) {
                 <div className="card-body text-center">
                   <h4> Total Orders</h4>
                   <h4>
-                    <a href="#">1</a>
-                  </h4>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4 mb-2">
-              <div className="card">
-                <div className="card-body text-center">
-                  <h4> Wishlist</h4>
-                  <h4>
-                    <a href="#">1</a>
-                  </h4>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4 mb-2">
-              <div className="card">
-                <div className="card-body text-center">
-                  <h4> Addresses</h4>
-                  <h4>
-                    <a href="#">1</a>
+                    <Link to="/customer/orders">{customer0rders.length} </Link>
                   </h4>
                 </div>
               </div>
@@ -44,5 +58,8 @@ function Dashboard({ isAuthenticated }) {
     </div>
   );
 }
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
 
-export default Dashboard;
+export default connect(mapStateToProps, { load_user })(Dashboard);

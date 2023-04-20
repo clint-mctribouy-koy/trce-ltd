@@ -38,7 +38,10 @@ urlpatterns = [
     path('api/brands/', views.BrandView.as_view(), name='brands' ),
     path('api/customers/', views.CustomerView.as_view(), name='customers' ),
     path('api/address/', views.ShippingAddressView.as_view(),  name='address' ),
-    path('payments/', include('core.urls.payment_urls'))
+    path('payments/', views.stripe_checkout, name='payments' ),
+    # path('api/orders/', views.OrderView.as_view(), name='orders' ),
+    path('api/<int:pk>/orders/', views.CustomerOrderView.as_view())
+
   
 ] 
 if settings.DEBUG:

@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { checkAuthenticated, load_user } from "../actions/auth";
+import { load_user } from "../actions/auth";
 import NavigationBar from "../scenes/global/Navbar";
 
-const Layout = ({ checkAuthenticated, load_user, children }) => {
+const Layout = ({ load_user, children }) => {
   useEffect(() => {
-    checkAuthenticated();
+    // checkAuthenticated();
     load_user();
   }, []);
 
@@ -17,4 +17,4 @@ const Layout = ({ checkAuthenticated, load_user, children }) => {
   );
 };
 
-export default connect(null, { checkAuthenticated, load_user })(Layout);
+export default connect(null, { load_user })(Layout);

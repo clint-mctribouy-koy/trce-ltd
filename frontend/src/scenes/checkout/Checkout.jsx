@@ -22,6 +22,7 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import ApiService from "../../payment_api";
 import { useNavigate } from "react-router-dom";
 import { resetCart } from "../../state/cart_reducer";
+import TextField from "@mui/material/TextField";
 
 const FlexBox = styled(Box)`
   display: flex;
@@ -69,8 +70,9 @@ const Checkout = (props) => {
       type: "card",
       card: card,
     });
+
     const requestBody = {
-      customer: values.email,
+      customer: initialValues.email,
       shipping_address: [
         values.billingAddress.firstName,
         values.billingAddress.lastName,
@@ -177,7 +179,9 @@ const Checkout = (props) => {
                   setFieldValue={setFieldValue}
                 />
               )}
+
               <CardElement id="card-element" onChange={handleChange} />
+
               <Box display="flex" justifyContent="space-between" gap="50px">
                 {!isFirstStep && (
                   <Button
@@ -221,6 +225,8 @@ const Checkout = (props) => {
   );
 };
 
+const user_email = localStorage.getItem("user_email");
+
 const initialValues = {
   billingAddress: {
     first_name: "",
@@ -239,8 +245,8 @@ const initialValues = {
     city: "",
     postal_code: "",
   },
-  email: "",
-  phoneNumber: "",
+  email: user_email,
+  // phoneNumber: "",
 };
 
 const checkoutSchema = [

@@ -55,10 +55,13 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    orders = models.ForeignKey('Order', on_delete=models.SET_NULL, null=True)
 
     objects = UserAccountManager()
 
     USERNAME_FIELD = 'email'
+
+
 
     def get_full_name(self):
         return self.first_name
@@ -115,6 +118,7 @@ class ShippingAddress(models.Model):
     
 class Order(models.Model):
     customer = models.EmailField(max_length=255, null=True)
+    user = models.ForeignKey(UserAccount, on_delete=models.SET_NULL, null=True)
     shipping_address =  models.TextField(null=True)
     payment_method = models.CharField(max_length=200, null=True, blank=True)
     total_price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
@@ -122,7 +126,11 @@ class Order(models.Model):
     createdAt = models.DateTimeField(default=timezone.now)
     _id = models.BigAutoField(primary_key=True, editable=False)
 
+    @staticmethod
+    def get_orders_by_customer(user_id):
+        return Order.objects.filter(customer=user_id).order_by('-createdAt')
+
     def __str__(self):
-        return str(self.customer)
+        return str(f'Customer: {self.customer} Order Date: {self.createdAt} ')
 
 

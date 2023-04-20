@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./scenes/home/Home";
 import Footer from "./scenes/global/Footer";
 import ItemDetails from "./scenes/itemDetails/ItemDetails";
-import CartMenu from "./scenes/global/CartMenu";
+import CartMenu from "./scenes/checkout/CartMenu";
 import Checkout from "./scenes/checkout/Checkout";
 import Confirmation from "./scenes/checkout/Confirmation";
 import LoginScreen from "./scenes/home/LoginScreen";
@@ -21,6 +21,7 @@ import CustomerOrders from "./scenes/customer/CustomerOrders";
 import { saveState } from "./localstorage";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js/pure";
+import CheckoutSignin from "./scenes/checkout/CheckoutSignin";
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -50,7 +51,11 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="item/:id" element={<ItemDetails />} />
               <Route path="checkout" element={<Checkout />} />
-
+              <Route
+                exact
+                path="/checkout/signin"
+                element={<CheckoutSignin />}
+              />
               <Route path="checkout/success" element={<Confirmation />} />
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/signup" element={<RegisterScreen />} />

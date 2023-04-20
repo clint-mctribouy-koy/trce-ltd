@@ -1,9 +1,8 @@
 from django.urls import path, include, re_path
-from django.views.generic import TemplateView
-
+from core import views
 
 urlpatterns = [
-    path('auth/', include('djoser.urls')),
-    path('auth/', include('djoser.urls.jwt')),
-    path('auth/', include('djoser.social.urls')),
+    path('login/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('register/', views.registerUser, name='register'),
+    path('profile/', views.getUserProfile, name="users-profile"),
 ]

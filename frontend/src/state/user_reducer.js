@@ -28,11 +28,11 @@ export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case AUTHENTICATED_SUCCESS:
-      return {
-        ...state,
-        isAuthenticated: true,
-      };
+    // case AUTHENTICATED_SUCCESS:
+    //   return {
+    //     ...state,
+    //     isAuthenticated: true,
+    //   };
     case LOGIN_SUCCESS:
       localStorage.setItem("access", payload.access);
       localStorage.setItem("refresh", payload.refresh);
@@ -48,15 +48,18 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
       };
     case USER_LOADED_SUCCESS:
+      localStorage.setItem("user", payload.id);
+      localStorage.setItem("user_email", payload.email);
+
       return {
         ...state,
         user: payload,
       };
-    case AUTHENTICATED_FAIL:
-      return {
-        ...state,
-        isAuthenticated: false,
-      };
+    // case AUTHENTICATED_FAIL:
+    //   return {
+    //     ...state,
+    //     isAuthenticated: false,
+    //   };
     case USER_LOADED_FAIL:
       return {
         ...state,

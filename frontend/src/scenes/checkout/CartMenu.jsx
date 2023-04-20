@@ -1,5 +1,5 @@
 import { Box, Button, Divider, IconButton, Typography } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -19,7 +19,7 @@ const FlexBox = styled(Box)`
   align-items: center;
 `;
 
-const CartMenu = () => {
+const CartMenu = ({ isAuthenticated }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // const storedCartItems = localStorage.getItem("cart");
@@ -132,7 +132,12 @@ const CartMenu = () => {
                 m: "20px 0",
               }}
               onClick={() => {
-                navigate("/checkout");
+                if (isAuthenticated) {
+                  navigate("/checkout");
+                } else {
+                  navigate("/checkout/signin");
+                }
+
                 dispatch(setIsCartOpen({}));
               }}
             >
@@ -145,4 +150,8 @@ const CartMenu = () => {
   );
 };
 
-export default CartMenu;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, null)(CartMenu);

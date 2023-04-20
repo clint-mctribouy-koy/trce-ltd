@@ -2,6 +2,9 @@ import { Box, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
 
 const Payment = ({ values, touched, errors, handleBlur, handleChange }) => {
+  const user_email = localStorage.getItem("user_email");
+  console.log(user_email);
+
   return (
     <Box m="30px 0">
       {/* CONTACT INFO */}
@@ -15,7 +18,7 @@ const Payment = ({ values, touched, errors, handleBlur, handleChange }) => {
           label="Email"
           onBlur={handleBlur}
           onChange={handleChange}
-          value={values.email}
+          // value={values.email}
           name="email"
           error={!!touched.email && !!errors.email}
           helperText={touched.email && errors.email}

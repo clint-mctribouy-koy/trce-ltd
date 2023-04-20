@@ -166,45 +166,66 @@ CORS_ALLOW_CREDENTIALS = True
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-   'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'clintmctribouykoy@googlemail.com'
-EMAIL_HOST_PASSWORD = 'jhfvyzdgsvimvoxd'
-EMAIL_USE_TLS = True
+
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'clintmctribouykoy@googlemail.com'
+# EMAIL_HOST_PASSWORD = 'jhfvyzdgsvimvoxd'
+# EMAIL_USE_TLS = True
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=630),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'UPDATE_LAST_LOGIN': False,
     'AUTH_TOKEN_CLASSES': (
         'rest_framework_simplejwt.tokens.AccessToken',
-    )
+    ),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+
 }
 
 
-DJOSER = {
-    'LOGIN_FIELD': 'email',
-    'USER_CREATE_PASSWORD_RETYPE': True,
-    'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
-    'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
-    'SEND_CONFIRMATION_EMAIL': True,
-    'SET_USERNAME_RETYPE': True,
-    'SET_PASSWORD_RETYPE': True,
-    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': 'activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': True,
-    'SERIALIZERS':{
-        'user_create':'core.serializers.UserCreateSerializer', 
-        'user': 'core.serializers.UserCreateSerializer',
-        'current_user': 'core.serializers.UserCreateSerializer',
-        'user_delete': 'djoser.serializers.UserDeleteSeializer'
-    },
-}
+# DJOSER = {
+#     'LOGIN_FIELD': 'email',
+#     'USER_CREATE_PASSWORD_RETYPE': True,
+#     'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
+#     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
+#     'SEND_CONFIRMATION_EMAIL': True,
+#     'SET_USERNAME_RETYPE': True,
+#     'SET_PASSWORD_RETYPE': True,
+#     'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+#     'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
+#     'ACTIVATION_URL': 'activate/{uid}/{token}',
+#     'SEND_ACTIVATION_EMAIL': True,
+#     'SERIALIZERS':{
+#         'user_create':'core.serializers.UserCreateSerializer', 
+#         'user': 'djoser.serializers.UserSerializer',
+#         'current_user': 'djoser.serializers.UserSerializer',
+#         'user_delete': 'djoser.serializers.UserDeleteSeializer'
+#     },
+# }

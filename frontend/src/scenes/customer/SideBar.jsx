@@ -17,18 +17,12 @@ function SideBar() {
         {" "}
         Orders
       </Link>
-      <Link href="#" className="list-group-item list-group-item-action">
-        {" "}
-        WishList
-      </Link>
+
       <Link href="#" className="list-group-item list-group-item-action">
         {" "}
         Profile
       </Link>
-      <Link href="#" className="list-group-item list-group-item-action">
-        {" "}
-        Registered Addresses
-      </Link>
+
       <a
         href="#"
         className="list-group-item list-group-item-action text-danger"
