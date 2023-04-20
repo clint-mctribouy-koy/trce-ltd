@@ -72,7 +72,7 @@ function App() {
               <Route exact path="/reset-password" element={<ResetPasword />} />
               <Route
                 exact
-                path="/productlist"
+                path="/admin/productlist"
                 element={<ProductListScreen />}
               />
               <Route

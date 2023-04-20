@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 import { logout } from "../../actions/auth";
 import React, { useState, useEffect } from "react";
 
-function NavigationBar({ logout, isAuthenticated }) {
+function NavigationBar({ logout, isAuthenticated, isAdmin }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
@@ -78,6 +78,12 @@ function NavigationBar({ logout, isAuthenticated }) {
                     <MenuItem onClick={() => navigate("/customer/dashboard")}>
                       Dashboard
                     </MenuItem>
+
+                    {isAdmin ? (
+                      <MenuItem onClick={() => navigate("/admin/productlist")}>
+                        Admin Dashboard
+                      </MenuItem>
+                    ) : null}
                     <MenuItem onClick={() => logout_user()}>Logout</MenuItem>
                   </Menu>
                 </>
@@ -136,6 +142,7 @@ function NavigationBar({ logout, isAuthenticated }) {
 }
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  isAdmin: state.auth.isAdmin,
 });
 
 export default connect(mapStateToProps, { logout })(NavigationBar);

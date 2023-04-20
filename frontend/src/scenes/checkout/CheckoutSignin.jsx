@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import { login } from "../../actions/auth";
 
-const LoginScreen = ({ login, isAuthenticated }) => {
+const LoginScreen = ({ login, isAuthenticated, isAdmin }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -70,6 +70,7 @@ const LoginScreen = ({ login, isAuthenticated }) => {
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  isAdmin: state.auth.isAdmin,
 });
 
 export default connect(mapStateToProps, { login })(LoginScreen);

@@ -21,6 +21,7 @@ const initialState = {
   access: localStorage.getItem("access"),
   refresh: localStorage.getItem("refresh"),
   isAuthenticated: null,
+  isAdmin: null,
   user: null,
 };
 
@@ -36,11 +37,13 @@ export default function (state = initialState, action) {
     case LOGIN_SUCCESS:
       localStorage.setItem("access", payload.access);
       localStorage.setItem("refresh", payload.refresh);
+      localStorage.setItem("isAdmin", payload.isAdmin);
       return {
         ...state,
         isAuthenticated: true,
         access: payload.access,
         refresh: payload.refresh,
+        isAdmin: payload.isAdmin,
       };
     case SIGNUP_SUCCESS:
       return {
@@ -76,6 +79,7 @@ export default function (state = initialState, action) {
         access: null,
         refresh: null,
         isAuthenticated: false,
+        isAdmin: false,
         user: null,
       };
     case PASSWORD_RESET_SUCCESS:

@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { ListGroup, Card, Button, Form } from "react-bootstrap";
 import API from "../../API";
+import { connect } from "react-redux";
+import { load_user } from "../../actions/auth";
+import { Navigate } from "react-router-dom";
 
-const AddProduct = () => {
+const AddProduct = ({ isAuthenticated, isAdmin }) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [brand, setBrand] = useState("");
@@ -12,6 +15,10 @@ const AddProduct = () => {
   useEffect(() => {
     listProducts();
   }, []);
+
+  if (!isAdmin) {
+    return <Navigate to="/" replace />;
+  }
 
   const listProducts = () => {
     API.get("/")
@@ -148,5 +155,9 @@ const AddProduct = () => {
     </div>
   );
 };
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  isAdmin: state.auth.isAdmin,
+});
 
-export default AddProduct;
+export default connect(mapStateToProps, { load_user })(AddProduct);

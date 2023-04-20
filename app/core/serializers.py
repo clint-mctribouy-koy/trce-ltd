@@ -4,11 +4,6 @@ from .models import Product, Order, UserAccount, Brand, ShippingAddress
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
-# class UserCreateSerializer(UserCreateSerializer):
-#     class Meta(UserCreateSerializer.Meta):
-#         model = UserAccount
-#         fields = ('id', 'email', 'first_name', 'last_name', 'password')
-
 class UserSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField(read_only=True)
     _id = serializers.SerializerMethodField(read_only=True)
